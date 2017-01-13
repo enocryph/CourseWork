@@ -1,0 +1,9 @@
+
+<h2>New User Registration Form</h2>
+<form action="{{ path('user_registration') }}" method="post" class="form-horizontal">
+    {{ form_start(form) }}
+    {{ form_widget(form) }}
+    <input type="submit" class="btn btn-primary" value="Register" />
+    {{ form_end(form) }}
+
+</form>
