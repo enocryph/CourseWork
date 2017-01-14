@@ -28,8 +28,6 @@ use AppBundle\Service\TokenGenerator;
 class PasswordResetTokenController extends Controller
 {
     /**
-     * Creates a new PasswordResetToken entity.
-     *
      * @Route("/", name="forgotpassword")
      * @Method({"GET", "POST"})
      */
@@ -68,6 +66,8 @@ class PasswordResetTokenController extends Controller
                                 'token' => $passwordResetToken->getToken()
                             ),
                                 UrlGeneratorInterface::ABSOLUTE_URL),
+                        )
+                    ),
                     'text/html'
                 );
             $this->get('mailer')->send($message);
