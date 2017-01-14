@@ -51,13 +51,13 @@ class PasswordResetTokenController extends Controller
             $em->flush();
 
             $message = \Swift_Message::newInstance(null)
-                ->setSubject('Password reset request from URLShortener.loc')
+                ->setSubject('Password reset request')
                 ->setFrom('sashka.k777@gmail.com')
                 ->setTo('sashka.k777@gmail.com')
                 ->setBody(
                     $this->renderView('email_password_reset.html.twig',
                         array(
-                            'url' => $this->generateUrl('user_activate', array(
+                            'url' => $this->generateUrl('user_reset_password', array(
                                 'token' => $passwordResetToken->getToken()
                             ),
                                 UrlGeneratorInterface::ABSOLUTE_URL),

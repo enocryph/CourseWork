@@ -13,7 +13,7 @@ use Doctrine\ORM\Mapping as ORM;
  * PasswordResetToken
  *
  * @ORM\Table(name="password_reset_token")
- * @ORM\Entity(repositoryClass="UserBundle\Repository\PasswordResetTokenRepository")
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\PasswordResetTokenRepository")
  * @ORM\HasLifecycleCallbacks
  */
 class PasswordResetToken
