@@ -83,4 +83,41 @@ class UserController extends Controller
             array('form' => $form->createView())
         );
     }
+
+    /**
+     * @Route("/passwordreset/{token}", name="user_reset_password")
+     */
+    public function resetPasswordAction(Request $request, $token)
+    {
+        $resetForm = $this->createForm(ResetPasswordType::class);
+        $resetForm->handleRequest($request);
+
+        $em = $this->getDoctrine()->getManager();
+        $tokenEntry = $em->getRepository('AppBundle:PasswordResetToken')
+            ->findOneBy(array('token' => $token));
+
+        if(!$tokenEntry){
+            $this->addFlash('error', 'Provided token is not valid');
+            return $this->redirectToRoute('homepage');
+        }
+        if ($resetForm->isSubmitted() && $resetForm->isValid()) {
+            $userObject = $em->getRepository('AppBundle:User')
+                ->findOneBy(array('id' => $tokenEntry->getUserId()));
+
+            $em->remove($tokenEntry);
+
+            $plainPassword = $resetForm['password']->getData();
+            $encoder = $this->container->get('security.password_encoder');
+            $encoded = $encoder->encodePassword($userObject, $plainPassword);
+            $userObject->setPassword($encoded);
+            $em->persist($userObject);
+
+            $em->flush();
+            return $this->redirectToRoute('login');
+        }
+        return $this->render('reset_password.html.twig', array(
+            'token' => $token,
+            'resetForm' => $resetForm->createView()
+        ));
+    }
 }
