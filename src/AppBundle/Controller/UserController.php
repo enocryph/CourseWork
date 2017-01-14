@@ -39,10 +39,11 @@ class UserController extends Controller
             $password = $this->get('security.password_encoder')
                 ->encodePassword($user, $user->getPassword());
             $user->setPassword($password);
-
+            $user->setRole('ROLE_USER');
+            $user->setEnabled(false);
             $em = $this->getDoctrine()->getManager();
             $em->persist($user);
-            $em->flush();
+
 
             $token = new TokenGenerator();
             $activationToken = new ActivationToken();
