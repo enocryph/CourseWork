@@ -38,3 +38,4 @@
 #Node modules
 /node_modules/*
 
+/web/assets/vendor/
