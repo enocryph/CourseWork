@@ -6,6 +6,7 @@ use AppBundle\Entity\Product;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Validator\Constraints\DateTime;
 
 /**
  * Product controller.
@@ -44,6 +45,11 @@ class ProductController extends Controller
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $currentDateTime = new \DateTime('now');
+
+            $product->setDateOfCreation($currentDateTime);
+            $product->setDateOfLastUpdate($currentDateTime);
+
             $em = $this->getDoctrine()->getManager();
             $em->persist($product);
             $em->flush($product);
@@ -86,6 +92,12 @@ class ProductController extends Controller
         $editForm->handleRequest($request);
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {
+
+            $currentDateTime = new \DateTime('now');
+            $dateOfCreation = $product->getDateOfCreation();
+            $product->setDateOfCreation($dateOfCreation);
+            $product->setDateOfLastUpdate($currentDateTime);
+
             $this->getDoctrine()->getManager()->flush();
 
             return $this->redirectToRoute('product_edit', array('id' => $product->getId()));
