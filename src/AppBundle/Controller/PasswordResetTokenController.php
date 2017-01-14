@@ -20,16 +20,11 @@ use Symfony\Component\Validator\Constraints\Email;
 use AppBundle\Entity\PasswordResetToken;
 use AppBundle\Form\EmailResetPasswordType;
 use AppBundle\Service\TokenGenerator;
-/**
- * PasswordResetToken controller.
- *
- * @Route("/passwordreset")
- */
+
 class PasswordResetTokenController extends Controller
 {
     /**
-     * @Route("/", name="forgotpassword")
-     * @Method({"GET", "POST"})
+     * @Route("/passwordreset", name="forgotpassword")
      */
     public function forgotPasswordAction(Request $request)
     {
