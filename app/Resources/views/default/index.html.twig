@@ -1,15 +1,36 @@
 {% extends 'base.html.twig' %}
-
+{% block title %}Product's Catalog Main Page{% endblock %}
 {% block body %}
     <div class="main-page-wrapper">
         <div class="vertical-middle">
             <h1 class="project-name">Course Work Product's Catalog</h1>
             <p class="project-description">Shit Happens</p>
             <a href="/login" class="btn btn-default btn-150px btn-margin">Login</a>
-            <a href="/register" class="btn btn-default btn-150px">Register</a>
+            <a href="/register" class="btn btn-default btn-150px btn-margin">Register</a>
+            <p class="password-reset-wrapper">
+                Forgot your password?
+                Click <a href="/passwordreset" class="link-border-animation link-orange">here.</a>
+            </p>
+
+            <div class="develop">
+                <p class="password-reset-wrapper">
+                    This buttons will be deleted in production
+                </p>
+                <a href="/product" class="btn btn-warning btn-150px btn-margin">Product</a>
+                <a href="/passwordreset" class="btn btn-warning btn-150px btn-margin">Reset</a>
+            </div>
+
+
+            <p class="user-greetings">Hello,
+                <span class="username">Соня Мармеладова</span>,
+                start using
+                <a href="#" class="link-border-animation link-orange">Catalog</a>
+                now!
+            </p>
             <footer class="footer">
                 <p class="footer-text">
-                    Git repository <a href="https://github.com/enocryph/CourseWork" class="footer-link">here</a>.
+                    Git repository <a href="https://github.com/enocryph/CourseWork"
+                                      class="link-border-animation link-black">here</a>.
                 </p>
             </footer>
         </div>
@@ -54,8 +75,7 @@
     }
 
     .btn-margin {
-        margin-left: 10px;
-        margin-right: 10px;
+        margin: 10px;
     }
 
     .footer {
@@ -67,18 +87,46 @@
         font-size: 12px;
     }
 
-    .footer-link {
-        color: #000;
+    .link-border-animation {
+        border: none;
         border-bottom: 1px solid transparent;
+        text-decoration: none;
+        transition: .5s;
+    }
+
+    .link-border-animation:hover,
+    .link-border-animation:active {
+        transition: 1s;
         text-decoration: none;
     }
 
-    .footer-link:hover,
-    .footer-link:active {
+    .user-greetings {
+        font-size: 18px;
+        margin-top: 10px;
+    }
+
+    .username {
+        font-weight: bold;
+    }
+
+    .link-orange {
+        color: #e88e57;
+    }
+    .link-black {
         color: #000;
-        border-bottom: 1px solid black;
-        transition: 1s;
-        text-decoration: none;
+    }
+
+    .link-orange:hover {
+        border-color: #e88e57;
+        color: #e88e57;
+    }
+    .link-black:hover {
+        border-color: #000;
+        color: #000;
+    }
+    .password-reset-wrapper {
+        font-size: 14px;
+        margin: 0;
     }
 </style>
 {% endblock %}
