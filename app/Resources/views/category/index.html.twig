@@ -1,0 +1,62 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Categories list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Title</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for category in categories %}
+            <tr>
+                <td><a href="{{ path('category_show', { 'id': category.id }) }}">{{ category.id }}</a></td>
+                <td>{{ category.title }}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('category_show', { 'id': category.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('category_edit', { 'id': category.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('category_new') }}">Create a new category</a>
+        </li>
+    </ul>
+
+<ul class="mainmenu">
+{% set _depth = 0 %}
+{% for item in iterator %}
+    {% if loop.index > 1 %}
+    {% if iterator.depth > _depth %}
+    <ul class="submenu">
+    {% elseif iterator.depth < _depth %}
+    </li></ul>
+    {% else %}
+        </li>
+    {% endif %}
+
+    {% set _depth = iterator.depth %}
+    {% endif %}
+
+    <li><a href="{{ path('category_show', { 'id': item.id }) }}">{{ item.id }} </a>{{ item.title }}
+    <a href="{{ path('category_show', { 'id': item.id }) }}">show</a>
+
+        <a href="{{ path('category_edit', { 'id': item.id }) }}">edit</a>
+
+
+{% endfor%}
+    {% endblock body %}
