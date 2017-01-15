@@ -5,8 +5,10 @@ namespace AppBundle\Controller;
 use AppBundle\Entity\Product;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component\HttpFoundation\Request;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Validator\Constraints\DateTime;
+use AppBundle\Form\ProductType;
 
 /**
  * Product controller.
@@ -45,6 +47,21 @@ class ProductController extends Controller
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+
+            $file = $product->getImage();
+            if ($file) {
+                $fileName = md5(uniqid()).'.'.$file->guessExtension();
+                $file->move(
+                    $this->getParameter('images_directory'),
+                    $fileName
+                );
+                $product->setImage($fileName);
+            } else {
+                $fileName = 'empty.jpg';
+                $product->setImage($fileName);
+            }
+
+
             $currentDateTime = new \DateTime('now');
 
             $product->setDateOfCreation($currentDateTime);
@@ -87,11 +104,24 @@ class ProductController extends Controller
      */
     public function editAction(Request $request, Product $product)
     {
+        $image = $product->getImage();
         $deleteForm = $this->createDeleteForm($product);
         $editForm = $this->createForm('AppBundle\Form\ProductType', $product);
         $editForm->handleRequest($request);
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {
+
+            $file = $product->getImage();
+            if ($file) {
+                $fileName = md5(uniqid()).'.'.$file->guessExtension();
+                $file->move(
+                    $this->getParameter('images_directory'),
+                    $fileName
+                );
+                $product->setImage($fileName);
+            } else {
+                $product->setImage($image);
+            }
 
             $currentDateTime = new \DateTime('now');
             $dateOfCreation = $product->getDateOfCreation();
