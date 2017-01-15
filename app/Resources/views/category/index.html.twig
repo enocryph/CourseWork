@@ -37,4 +37,22 @@
         </li>
     </ul>
 
-{% endblock %}
+<ul class="mainmenu">
+{% set _depth = 0 %}
+{% for item in iterator %}
+    {% if loop.index > 1 %}
+    {% if iterator.depth > _depth %}
+    <ul class="submenu">
+    {% elseif iterator.depth < _depth %}
+    </li></ul>
+    {% else %}
+        </li>
+    {% endif %}
+
+    {% set _depth = iterator.depth %}
+    {% endif %}
+
+    <li>{{ item.title }}
+
+{% endfor%}
+    {% endblock body %}
