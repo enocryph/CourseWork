@@ -7,9 +7,15 @@
             <p class="project-description">Shit Happens</p>
             <a href="/login" class="btn btn-default btn-150px btn-margin">Login</a>
             <a href="/register" class="btn btn-default btn-150px btn-margin">Register</a>
-
+            <p class="password-reset-wrapper">
+                Forgot your password?
+                Click <a href="/passwordreset" class="link-border-animation link-orange">here.</a>
+            </p>
 
             <div class="develop">
+                <p class="password-reset-wrapper">
+                    This buttons will be deleted in production
+                </p>
                 <a href="/product" class="btn btn-warning btn-150px btn-margin">Product</a>
                 <a href="/passwordreset" class="btn btn-warning btn-150px btn-margin">Reset</a>
             </div>
@@ -117,6 +123,10 @@
     .link-black:hover {
         border-color: #000;
         color: #000;
+    }
+    .password-reset-wrapper {
+        font-size: 14px;
+        margin: 0;
     }
 </style>
 {% endblock %}
