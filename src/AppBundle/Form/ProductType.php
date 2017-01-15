@@ -5,6 +5,7 @@ namespace AppBundle\Form;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 
 class ProductType extends AbstractType
 {
@@ -16,6 +17,9 @@ class ProductType extends AbstractType
         $builder->add('name')
                 ->add('description')
                 ->add('isActive')
+                ->add('image', FileType::class, array('label' => 'Image',
+                    'data_class' => null,
+                    'required' => false))
                 ->add('uniqueIdentifier');
     }
     

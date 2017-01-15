@@ -33,6 +33,10 @@
                 <th>Uniqueidentifier</th>
                 <td>{{ product.uniqueIdentifier }}</td>
             </tr>
+            <tr>
+                <th>ProductImage</th>
+                <img src="{{ asset('uploads/images/' ~ product.image) }}" alt="{{ product.name }}.picture">
+            </tr>
         </tbody>
     </table>
 

@@ -3,6 +3,7 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Product
@@ -62,6 +63,13 @@ class Product
      * @ORM\Column(name="uniqueIdentifier", type="string", length=255, unique=true)
      */
     private $uniqueIdentifier;
+
+    /**
+     * @ORM\Column(type="string")
+     *
+     * @Assert\File(mimeTypes={ "image/*" })
+     */
+    private $image = 'empty.jpg';
 
 
     /**
@@ -216,6 +224,22 @@ class Product
     public function getUniqueIdentifier()
     {
         return $this->uniqueIdentifier;
+    }
+
+    /**
+     * @param mixed $image
+     */
+    public function setImage($image)
+    {
+        $this->image = $image;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getImage()
+    {
+        return $this->image;
     }
 }
 
