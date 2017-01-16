@@ -17,6 +17,7 @@ class ProductType extends AbstractType
         $builder->add('name')
                 ->add('description')
                 ->add('isActive')
+                ->add('category')
                 ->add('image', FileType::class, array('label' => 'Image',
                     'data_class' => null,
                     'required' => false))

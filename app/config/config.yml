@@ -8,6 +8,7 @@ imports:
 parameters:
     locale: en
     images_directory: '%kernel.root_dir%/../web/uploads/images'
+    empty_image: 'empty.jpg'
 
 framework:
     #esi:             ~
