@@ -14,10 +14,13 @@ class ImageDownloader
      * ImageDownloader constructor.
      */
     private $directory;
+    private $emptyImage;
 
-    public function __construct($directory)
+
+    public function __construct($directory, $emptyImage)
     {
         $this->directory = $directory;
+        $this->emptyImage = $emptyImage;
     }
 
     public function downloadImage($image, $oldPath = null)
@@ -33,7 +36,7 @@ class ImageDownloader
             $imageName = $oldPath;
             return $imageName;
         } else {
-            $imageName = 'empty.jpg';
+            $imageName = $this->emptyImage;
             return $imageName;
         }
     }
