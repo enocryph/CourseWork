@@ -9,6 +9,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Validator\Constraints\DateTime;
 use AppBundle\Form\ProductType;
+use AppBundle\Service\ImageDownloader;
 
 /**
  * Product controller.
@@ -49,19 +50,12 @@ class ProductController extends Controller
         if ($form->isSubmitted() && $form->isValid()) {
 
             $file = $product->getImage();
-            if ($file) {
-                $fileName = md5(uniqid()).'.'.$file->guessExtension();
-                $file->move(
-                    $this->getParameter('images_directory'),
-                    $fileName
-                );
-                $product->setImage($fileName);
-            } else {
-                $fileName = 'empty.jpg';
-                $product->setImage($fileName);
-            }
-
-
+//            $image = new ImageDownloader();
+//            $imagePath = $image->downloadImage($file);
+//            $product->setImage($imagePath);
+            $image = $this->get('app.image_downloader');
+            $imagePath = $image->downloadImage($file);
+            $product->setImage($imagePath);
             $currentDateTime = new \DateTime('now');
 
             $product->setDateOfCreation($currentDateTime);
@@ -104,7 +98,7 @@ class ProductController extends Controller
      */
     public function editAction(Request $request, Product $product)
     {
-        $image = $product->getImage();
+        $oldImagePath = $product->getImage();
         $deleteForm = $this->createDeleteForm($product);
         $editForm = $this->createForm('AppBundle\Form\ProductType', $product);
         $editForm->handleRequest($request);
@@ -112,16 +106,9 @@ class ProductController extends Controller
         if ($editForm->isSubmitted() && $editForm->isValid()) {
 
             $file = $product->getImage();
-            if ($file) {
-                $fileName = md5(uniqid()).'.'.$file->guessExtension();
-                $file->move(
-                    $this->getParameter('images_directory'),
-                    $fileName
-                );
-                $product->setImage($fileName);
-            } else {
-                $product->setImage($image);
-            }
+            $image = $this->get('app.image_downloader');
+            $imagePath = $image->downloadImage($file, $oldImagePath);
+            $product->setImage($imagePath);
 
             $currentDateTime = new \DateTime('now');
             $dateOfCreation = $product->getDateOfCreation();
