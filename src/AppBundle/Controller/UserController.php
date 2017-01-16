@@ -59,12 +59,12 @@ class UserController extends Controller
 
             $message = \Swift_Message::newInstance(null)
                 ->setSubject('Welcome')
-                ->setFrom('sashka.k777@gmail.com')
-                ->setTo('sashka.k777@gmail.com')
+                ->setFrom('courseworkproductscatalog@gmial.com')
+                ->setTo($user->getEmail())
                 ->setBody(
                     $this->renderView('email_register.html.twig',
                         array(
-                            'username' => $user->getUsername(),
+                            'username' => $user->getName(),
                             'email' => $user->getEmail(),
                             'url' => $this->generateUrl('user_activate', array(
                                 'token' => $activationToken->getToken()
