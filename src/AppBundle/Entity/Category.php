@@ -42,6 +42,12 @@ class Category
      */
     private $parent;
 
+    /**
+     * One Category has Many Products.
+     * @ORM\OneToMany(targetEntity="Product", mappedBy="product")
+     */
+    private $product;
+
 
     /**
      * Get id
