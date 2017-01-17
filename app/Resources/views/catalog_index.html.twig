@@ -1,0 +1,47 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="col-lg-3">
+        <h1>Category list</h1>
+        <ul class="list-group">
+        {% for category in categories %}
+            <li class="list-group-item"> {{category.title}}
+                <ul class="list-group">
+                    <li class="list-group-item">{{ category.title }}</li>
+                </ul>
+            </li>
+
+        {% endfor %}
+        </ul>
+    </div>
+    <div class="col-lg-9">
+        <h1>Products list</h1>
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Dateofcreation</th>
+                <th>Dateoflastupdate</th>
+                <th>Isactive</th>
+                <th>Uniqueidentifier</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for product in products %}
+                <tr>
+                    <td><a href="{{ path('product_show', { 'id': product.id }) }}">{{ product.id }}</a></td>
+                    <td>{{ product.name }}</td>
+                    <td>{{ product.description }}</td>
+                    <td>{% if product.dateOfCreation %}{{ product.dateOfCreation|date('Y-m-d H:i:s') }}{% endif %}</td>
+                    <td>{% if product.dateOfLastUpdate %}{{ product.dateOfLastUpdate|date('Y-m-d H:i:s') }}{% endif %}</td>
+                    <td>{% if product.isActive %}Yes{% else %}No{% endif %}</td>
+                    <td>{{ product.uniqueIdentifier }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+{% endblock %}
