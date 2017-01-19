@@ -37,26 +37,101 @@
         </li>
     </ul>
 
-<ul class="mainmenu">
-{% set _depth = 0 %}
-{% for item in iterator %}
-    {% if loop.index > 1 %}
-    {% if iterator.depth > _depth %}
-    <ul class="submenu">
-    {% elseif iterator.depth < _depth %}
-    </li></ul>
-    {% else %}
-        </li>
-    {% endif %}
+    <script>
 
-    {% set _depth = iterator.depth %}
-    {% endif %}
+        $.fn.ajaxgrid = function(options) {
+            var categoryTree;
 
-    <li><a href="{{ path('category_show', { 'id': item.id }) }}">{{ item.id }} </a>{{ item.title }}
-    <a href="{{ path('category_show', { 'id': item.id }) }}">show</a>
+            initializeBaseElements();
+            document.body.appendChild(categoryTree);
 
-        <a href="{{ path('category_edit', { 'id': item.id }) }}">edit</a>
+            buildCategoryTree(null, categoryTree);
 
 
-{% endfor%}
+
+            function applyOptions(options) {
+                if (!options.dataURL) {
+                    throw 'Wrong "dataUrl" exception';
+                }
+                if (!options.editUrl) {
+                    throw 'Wrong "editUrl" exception';
+                }
+                if (!options.sortableColumns) {
+                    options.sortableColumns = [];
+                }
+                if (!options.filterableColumns) {
+                    options.filterableColumns = [];
+                }
+                if (!options.rowsPerPage) {
+                    options.rowsPerPage = 5;
+                }
+            }
+
+            function initializeBaseElements() {
+                categoryTree = document.createElement('div');
+                categoryTree.classList.add('category-tree');
+            }
+
+            function buildCategoryTree(categoryId, parent) {
+                $.getJSON('src/ss.json', function(JSON_Data) {
+                    var categoryList = document.createElement('ul');
+                    categoryList.classList.add('category-tree-list');
+                    $.each(JSON_Data, function(index, element) {
+                        var categoryListItem = document.createElement('li');
+                        var checkbox = document.createElement('input');
+                        checkbox.setAttribute('type', 'checkbox');
+                        checkbox.setAttribute('name', element.id);
+                        console.log(checkbox);
+                        categoryListItem.classList.add('category-tree-list-item');
+                        categoryListItem.classList.add('category-tree-list-item-closed');
+                        categoryListItem.setAttribute('category_id', element.id);
+                        categoryListItem.setAttribute('class', 'category-tree-item category-tree-item-closed');
+                        categoryListItem.setAttribute('expanded', 'false');
+                        categoryListItem.setAttribute('downloaded', 'false');
+
+                        categoryListItem.innerHTML = element.title;
+                        categoryListItem.appendChild(checkbox);
+                        categoryList.appendChild(categoryListItem);
+                        addOnClick(categoryListItem);
+                    });
+                    parent.appendChild(categoryList);
+                })
+            }
+
+            function addOnClick(element) {
+                element.onclick = function (event) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                    var target = event.target;
+                    var expand = target.getAttribute('expanded');
+                    var download = target.getAttribute('downloaded');
+
+                    if (expand === 'false' && download === 'false') {
+                        target.setAttribute('expanded', 'true');
+                        target.setAttribute('downloaded', 'true');
+                        buildCategoryTree(target.getAttribute('category_id'), event.target);
+                        target.classList.remove('category-tree-item-closed');
+                        target.classList.add('category-tree-item-opened');
+                    } else if (expand === 'true' && download === 'true') {
+                        target.setAttribute('expanded', 'false');
+                        (target.getElementsByTagName('ul')[0]).classList.add('inactive');
+                        target.classList.add('category-tree-item-closed');
+                        target.classList.remove('category-tree-item-opened');
+                    } else if (expand === 'false' && download === 'true') {
+                        target.setAttribute('expanded', 'true');
+                        (target.getElementsByTagName('ul')[0]).classList.remove('inactive');
+                        target.classList.remove('category-tree-item-closed');
+                        target.classList.add('category-tree-item-opened');
+                    }
+                }
+            }
+
+        }
+
+        $("#plg").ajaxgrid();
+
+
+
+
+    </script>
     {% endblock body %}
