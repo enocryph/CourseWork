@@ -1,56 +1,124 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <h1>Product</h1>
+<div class="positioner clearfix">
+    <h1 class="product-name">{{ product.name }}</h1>
+    <div class="product-image-wrapper">
+        <img class ="product-image" src="{{ asset('uploads/images/' ~ product.image) }}" alt="{{ product.name }}.picture">
+    </div>
+    <div class="product-table-wrapper clearfix">
+        <table class="table table-bordered">
+            <tbody>
+                <tr class="active">
+                    <th>Наименование</th>
+                    <th>Значение</th>
+                </tr>
+                <tr>
+                    <th>Id</th>
+                    <td>{{ product.id }}</td>
+                </tr>
+                <tr>
+                    <th>Name</th>
+                    <td>{{ product.name }}</td>
+                </tr>
+                <tr>
+                    <th>Description</th>
+                    <td>{{ product.description }}</td>
+                </tr>
+                <tr>
+                    <th>Dateofcreation</th>
+                    <td>{% if product.dateOfCreation %}{{ product.dateOfCreation|date('Y-m-d H:i:s') }}{% endif %}</td>
+                </tr>
+                <tr>
+                    <th>Dateoflastupdate</th>
+                    <td>{% if product.dateOfLastUpdate %}{{ product.dateOfLastUpdate|date('Y-m-d H:i:s') }}{% endif %}</td>
+                </tr>
+                <tr>
+                    <th>Isactive</th>
+                    <td>{% if product.isActive %}Yes{% else %}No{% endif %}</td>
+                </tr>
+                <tr>
+                    <th>Uniqueidentifier</th>
+                    <td>{{ product.uniqueIdentifier }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 
-    <table>
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ product.id }}</td>
-            </tr>
-            <tr>
-                <th>Name</th>
-                <td>{{ product.name }}</td>
-            </tr>
-            <tr>
-                <th>Description</th>
-                <td>{{ product.description }}</td>
-            </tr>
-            <tr>
-                <th>Dateofcreation</th>
-                <td>{% if product.dateOfCreation %}{{ product.dateOfCreation|date('Y-m-d H:i:s') }}{% endif %}</td>
-            </tr>
-            <tr>
-                <th>Dateoflastupdate</th>
-                <td>{% if product.dateOfLastUpdate %}{{ product.dateOfLastUpdate|date('Y-m-d H:i:s') }}{% endif %}</td>
-            </tr>
-            <tr>
-                <th>Isactive</th>
-                <td>{% if product.isActive %}Yes{% else %}No{% endif %}</td>
-            </tr>
-            <tr>
-                <th>Uniqueidentifier</th>
-                <td>{{ product.uniqueIdentifier }}</td>
-            </tr>
-            <tr>
-                <th>ProductImage</th>
-                <img src="{{ asset('uploads/images/' ~ product.image) }}" alt="{{ product.name }}.picture">
-            </tr>
-        </tbody>
-    </table>
+    <div class="clearfix">
+        <div class="btn-group">
+            <a class="btn btn-default" href="/product/">Back to the list</a>
+            <a class="btn btn-default" href="/product/1/edit">Edit</a>
+        </div>
+        <form name="form" method="post" action="/product/1"><input type="hidden" name="_method" value="DELETE" />
+            <input class="btn btn-danger" type="submit" value="Delete">
+            <input type="hidden" id="form__token" name="form[_token]" value="CLhT8zpWQIzY4056xgAADox0pUOTYQ4goGzsuKo9658" /></form>
+    </div>
+</div>
+{% endblock %}
 
-    <ul>
-        <li>
-            <a href="{{ path('product_index') }}">Back to the list</a>
-        </li>
-        <li>
-            <a href="{{ path('product_edit', { 'id': product.id }) }}">Edit</a>
-        </li>
-        <li>
-            {{ form_start(delete_form) }}
-                <input type="submit" value="Delete">
-            {{ form_end(delete_form) }}
-        </li>
-    </ul>
+{% block stylesheets %}
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+        }
+
+        .positioner {
+            position: relative;
+            max-width: 1200px;
+            min-width: 360px;
+            padding: 10px;
+            margin: 0 auto;
+        }
+
+        .product-name {
+            font-size: 30px;
+            text-align: center;
+        }
+
+        .product-image-wrapper {
+            display: inline-block;
+            /*max-height: 450px;*/
+            /*max-width: 450px;*/
+            width: 40%;
+            float: left;
+            box-sizing: border-box;
+            text-align: center;
+            margin-bottom: 10px;
+
+        }
+
+        .product-image {
+            width: 100%;
+            height: 100%;
+            max-width: 500px;
+            object-fit: cover;
+            border-radius: 20px;
+        }
+
+        .clearfix::after,
+        .clearfix::before {
+            display: table;
+            clear: both;
+            content: "";
+        }
+
+        .product-table-wrapper {
+            width: 55%;
+            margin-left: 5%;
+            display: inline-block;
+        }
+
+        @media all and (max-width: 768px) {
+            .product-image-wrapper {
+                width: 100%;
+            }
+            .product-table-wrapper {
+                display: block;
+                width: 100%;
+                margin-left: 0;
+            }
+        }
+    </style>
 {% endblock %}
