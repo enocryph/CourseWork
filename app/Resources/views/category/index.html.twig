@@ -73,7 +73,7 @@
             }
 
             function buildCategoryTree(categoryId, parent) {
-                $.getJSON('src/ss.json', function(JSON_Data) {
+                $.getJSON('catalog/ajax/category/'+categoryId, function(JSON_Data) {
                     var categoryList = document.createElement('ul');
                     categoryList.classList.add('category-tree-list');
                     $.each(JSON_Data, function(index, element) {

@@ -43,12 +43,9 @@ class Category
     private $parent;
 
     /**
-     * One Category has Many Products.
-     * @ORM\OneToMany(targetEntity="Product", mappedBy="product")
+     * @ORM\OneToMany(targetEntity="Product", mappedBy="category")
      */
-    private $product;
-
-
+    private $products;
     /**
      * Get id
      *
@@ -147,7 +144,8 @@ class Category
         return $this->parent;
     }
     public function __construct() {
-        $this->children = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->products = new ArrayCollection();
+        $this->children = new ArrayCollection();
     }
     public function __toString() {
         return $this->title;

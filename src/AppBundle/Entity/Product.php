@@ -72,7 +72,6 @@ class Product
     private $image = 'empty.jpg';
 
     /**
-     * Many Products have One Category.
      * @ORM\ManyToOne(targetEntity="Category", inversedBy="products")
      * @ORM\JoinColumn(name="category_id", referencedColumnName="id")
      */
