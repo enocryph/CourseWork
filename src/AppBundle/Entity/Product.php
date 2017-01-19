@@ -73,7 +73,7 @@ class Product
 
     /**
      * Many Products have One Category.
-     * @ORM\ManyToOne(targetEntity="Category", inversedBy="products")
+     * @ORM\ManyToOne(targetEntity="Category", inversedBy="product")
      * @ORM\JoinColumn(name="category_id", referencedColumnName="id")
      */
     private $category;

@@ -44,7 +44,7 @@ class Category
 
     /**
      * One Category has Many Products.
-     * @ORM\OneToMany(targetEntity="Product", mappedBy="product")
+     * @ORM\OneToMany(targetEntity="Product", mappedBy="category")
      */
     private $product;
 
