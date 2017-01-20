@@ -5,76 +5,32 @@
     <title>AjaxGrid</title>
     <script src="jquery.js"></script>
     <style>
-        body {
-            margin: 0;
-        }
-        .category-tree {
-            display: inline-block;
-        }
-
         .inactive {
             display: none;
         }
 
-        .category-tree {
-        }
-
-        .category-tree-list-parent {
-            padding: 0;
-            margin: 0;
-            transition: 1s;
-        }
-
-        .category-tree-item-parent {
-            list-style: none;
+        .category-tree-item {
             position: relative;
+            padding-top: 2px;
+            padding-bottom: 2px;
             -webkit-user-select: none;
             -moz-user-select: none;
             -ms-user-select: none;
             user-select: none;
-            padding-top: 10px;
-            padding-bottom: 10px;
-            padding-left: 20px;
-            padding-right: 20px;
-            box-sizing: content-box;
-            background: #4e4a56;
-            color: #fff;
-            -webkit-box-shadow: 0px 0px 2px 1px rgba(0,0,0,0.75);
-            -moz-box-shadow: 0px 0px 2px 1px rgba(0,0,0,0.75);
-            box-shadow: 0px 0px 2px 1px rgba(0,0,0,0.75);
-            /*font-weight: bold;*/
-            transition: 1s;
         }
 
         .category-tree-list {
             margin: 0;
-            padding: 0;
-        }
-
-        .category-tree-item {
-            list-style: none;
-            position: relative;
-            -webkit-user-select: none;
-            -moz-user-select: none;
-            -ms-user-select: none;
-            user-select: none;
-            padding-top: 5px;
-            padding-bottom: 5px;
             padding-left: 20px;
-            box-sizing: content-box;
-            font-weight: normal;
-        }
-
-        .category-tree-item::after {
-
+            list-style: none;
         }
 
         .category-tree-item-control-closed::after {
             position: absolute;
             width: 16px;
             height: 16px;
-            left: 0;
-            top: 10px;
+            left: -20px;
+            top: 4px;
             background: url('img/arrow-right.png');
             content: '';
         }
@@ -83,11 +39,13 @@
             position: absolute;
             width: 16px;
             height: 16px;
-            left: 0;
-            top: 10px;
+            left: -20px;
+            top: 4px;
             background: url('img/arrow-down.png');
             content: '';
         }
+
+
     </style>
 </head>
 <body>
@@ -132,49 +90,71 @@
 
         function buildCategoryTree(categoryId, parent) {
             $.getJSON('src/ss.json', function(JSON_Data) {
-                var listItemStyle;
-                var listStyle;
+                var listItemStyle = 'category-tree-item category-tree-item-control-closed';
+                var listStyle = 'category-tree-list';
 
-                if (categoryId === null) {
-                    listItemStyle = 'category-tree-item-parent category-tree-item-control-closed';
-                    listStyle = 'category-tree-list-parent';
-                } else {
-                    listItemStyle = 'category-tree-item category-tree-item-control-closed';
-                    listStyle = 'category-tree-list';
-                }
                 var categoryList = document.createElement('ul');
                 categoryList.setAttribute('class', listStyle);
+
                 $.each(JSON_Data, function(index, element) {
-                    if (element.children === 'false') {
-                        listItemStyle = 'category-tree-item';
+
+
+                    var checkbox = createCheckbox();
+                    checkbox.setAttribute('category_id', element.id);
+
+                    var categoryListItem = createLi();
+
+                    if (element.children === false) {
+                        listItemStyle = '';
+                        listStyle = '';
+                        categoryListItem.setAttribute('childs', 'false');
+                    } else {
+                        listItemStyle = 'category-tree-item category-tree-item-control-closed';
                         listStyle = 'category-tree-list';
+                        categoryListItem.setAttribute('childs', 'true');
                     }
-                    var categoryListItem = document.createElement('li');
+
                     categoryListItem.setAttribute('category_id', element.id);
                     categoryListItem.setAttribute('class', listItemStyle);
-                    categoryListItem.setAttribute('expanded', 'false');
-                    categoryListItem.setAttribute('downloaded', 'false');
 
-                    categoryListItem.innerHTML = element.title;
-                    categoryList.appendChild(categoryListItem);
-                    if (element.children === 'false') {
-                        alert('vivod');
-                    } else {
-                        addOnClick(categoryListItem);
+                    if ((parent.tagName === 'LI') && (parent.firstChild).checked) {
+                        checkbox.setAttribute('checked', 'checked');
                     }
+
+                    categoryListItem.appendChild(checkbox);
+                    categoryListItem.innerHTML += element.title;
+                    categoryList.appendChild(categoryListItem);
+                    checkboxClick(categoryListItem);
+
+                    addOnClick(categoryListItem);
+
                 });
                 parent.appendChild(categoryList);
             })
         }
 
+        function createLi() {
+            var li = document.createElement('li');
+            li.setAttribute('expanded', 'false');
+            li.setAttribute('downloaded', 'false');
+            return li;
+        }
+        function createCheckbox() {
+            var checkbox = document.createElement('input');
+            checkbox.setAttribute('type', 'checkbox');
+            checkbox.setAttribute('class', 'tree-checkbox');
+            return checkbox;
+        }
+
         function addOnClick(element) {
             element.onclick = function (event) {
-//                event.preventDefault();
                 event.stopPropagation();
                 var target = event.target;
                 var expand = target.getAttribute('expanded');
                 var download = target.getAttribute('downloaded');
-
+                if (target.getAttribute('childs') === 'false') {
+                    return;
+                }
                 if (expand === 'false' && download === 'false') {
                     target.setAttribute('expanded', 'true');
                     target.setAttribute('downloaded', 'true');
@@ -192,6 +172,21 @@
                     target.classList.remove('category-tree-item-control-closed');
                     target.classList.add('category-tree-item-control-opened');
                 }
+            }
+        }
+
+        function checkboxClick(element) {
+            var parentCheckbox = element.firstChild;
+            (element.firstChild).onclick = function (event) {
+                var checkboxes = element.getElementsByClassName('tree-checkbox');
+                for (var i = 1; i < checkboxes.length; i++) {
+                    if (!parentCheckbox.checked) {
+                        checkboxes[i].checked = 0;
+                    } else {
+                        checkboxes[i].checked = !0;
+                    }
+                }
+
             }
         }
 
