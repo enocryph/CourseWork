@@ -278,39 +278,42 @@
     col-sm-offset-4 col-lg-offset-2">
 
     </div>
-    <div class="zui-pager col-md-12 col-xs-12 col-sm-12 col-lg-12 text-center">
-        <ol class="btn-group">
-            <li class="btn-group__item">
-                <i class="i-chevron-left"></i>
-            </li>
-            <li class="btn-group__item">
-                <button class="btn btn--basic current">1</button>
-            </li>
-            <li class="btn-group__item">
-                <button class="btn btn--basic" disabled="disabled" style="display: none;">...</button>
-            </li>
-            <li class="btn-group__item">
-                <button class="btn btn--basic"><span>2</span></button>
-            </li>
-            <li class="btn-group__item">
-                <button class="btn btn--basic"><span>3</span></button>
-            </li>
-            <li class="btn-group__item">
-                <button class="btn btn--basic"><span>4</span></button>
-            </li>
-            <li class="btn-group__item">
-                <button class="btn btn--basic"><span>5</span></button>
-            </li>
-            <li class="btn-group__item">
-                <button class="btn btn--basic" disabled="disabled">...</button>
-            </li>
-            <li class="btn-group__item">
-                <button class="btn btn--basic"><span>40</span></button>
-            </li>
-            <li class="btn-group__item">
-                <i class="i-chevron-right"></i>
-            </li>
-        </ol>
+    <div id="pagination" class="col-md-10 col-xs-12 col-sm-8 col-lg-10 col-md-offset-2
+    col-sm-offset-4 col-lg-offset-2">
+        <div class="zui-pager col-md-12 col-xs-12 col-sm-12 col-lg-12 text-center">
+            <ol class="btn-group">
+                <li class="btn-group__item">
+                    <i class="i-chevron-left"></i>
+                </li>
+                <li class="btn-group__item">
+                    <button class="btn btn--basic current">1</button>
+                </li>
+                <li class="btn-group__item">
+                    <button class="btn btn--basic" disabled="disabled" style="display: none;">...</button>
+                </li>
+                <li class="btn-group__item">
+                    <button class="btn btn--basic"><span>2</span></button>
+                </li>
+                <li class="btn-group__item">
+                    <button class="btn btn--basic"><span>3</span></button>
+                </li>
+                <li class="btn-group__item">
+                    <button class="btn btn--basic"><span>4</span></button>
+                </li>
+                <li class="btn-group__item">
+                    <button class="btn btn--basic"><span>5</span></button>
+                </li>
+                <li class="btn-group__item">
+                    <button class="btn btn--basic" disabled="disabled">...</button>
+                </li>
+                <li class="btn-group__item">
+                    <button class="btn btn--basic"><span>40</span></button>
+                </li>
+                <li class="btn-group__item">
+                    <i class="i-chevron-right"></i>
+                </li>
+            </ol>
+        </div>
     </div>
 
     <script>
@@ -336,9 +339,10 @@
                 delegateClick(event);
             }
 
+            //initial requests
             buildCategoryTree(null, rootElement);
             getProductsAjax('');
-            
+
             function generateSplitter(level) {
                 var splitter = '&nbsp;&nbsp;';
                 var completeSplitter = '';
