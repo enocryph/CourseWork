@@ -34,6 +34,35 @@ class CatalogController extends Controller
         ));
     }
     /**
+     * @Route("/ajax/product", name="products_ajax")
+     * @Method("GET")
+     */
+    public function productAjaxAction(Request $request)
+    {
+        $categoryId=$request->get('category');
+        $em = $this->getDoctrine()->getManager();
+        $requestCategory = $em->getRepository("AppBundle:Category")->find($categoryId);
+
+        $em=$em->getRepository("AppBundle:Product");
+        $responseProducts=array();
+        $collection = new ArrayCollection(array($requestCategory));
+        $category_iterator = new RecursiveCategoryIterator($collection);
+        $recursive_iterator = new \RecursiveIteratorIterator($category_iterator, \RecursiveIteratorIterator::SELF_FIRST);
+        foreach ($recursive_iterator as $index => $child_category)
+        {
+            $products=$em->findBy(array('category'=>$child_category->getId()));
+            foreach ($products as $product){
+                $responseProducts[]=array(
+                    'id'=>$product->getId(),
+                    'name'=>$product->getName(),
+                    'image'=>$product->getImage(),
+                );
+            }
+        }
+
+        return new JsonResponse($responseProducts);
+    }
+    /**
      * @Route("/ajax/category/{id}", name="category_ajax")
      * @Method("GET")
      */
@@ -61,4 +90,5 @@ class CatalogController extends Controller
 
         return new JsonResponse($responseCategories);
     }
+
 }
