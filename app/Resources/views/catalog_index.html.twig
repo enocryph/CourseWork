@@ -1,47 +1,358 @@
 {% extends 'base.html.twig' %}
+{% block stylesheets %}
+    <style>
+        .inactive {
+            display: none;
+        }
 
+        .tree-item {
+            position: relative;
+            line-height: 40px;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            /*background: #79a002;*/
+            background: #eb9316;
+            color: #fff;
+            transition: .5s;
+        }
+        
+        .tree-item:hover {
+            /*background: #8dae17;*/
+            background: #ee9f30;
+            transition: .5s;
+        }
+
+        .tree-list {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+
+        .tree-item-control-closed::after {
+            position: absolute;
+            width: 16px;
+            height: 16px;
+            right: 8px;
+            top: 12px;
+            background: url( {{ asset('ajax-grid/img/arrow-right.png') }});
+            content: '';
+        }
+
+        .tree-item-control-opened::after {
+            position: absolute;
+            width: 16px;
+            height: 16px;
+            right: 8px;
+            top: 12px;
+            background: url({{ asset('ajax-grid/img/arrow-down.png') }});
+            content: '';
+        }
+
+        #category-tree {
+            display: inline-block;
+            position: relative;
+            /*width: 300px;*/
+            padding: 0;
+            height: 100vh;
+            background: #eb9316;
+            position: fixed;
+            overflow-y: auto;
+            overflow-x: auto;
+
+        }
+        
+        .tree-item-active {
+            background: #000;
+        }
+
+        .tree-item-active:hover {
+            background: #000;
+        }
+        #category-tree::-webkit-scrollbar{width:10px;height:5px;cursor:pointer}
+        #category-tree::-webkit-scrollbar-track-piece{background:#eb9316;-webkit-border-radius:3px}
+        #category-tree::-webkit-scrollbar-thumb:vertical{height:5px;background-color: #444444;-webkit-border-radius:3px;cursor:pointer}
+        #category-tree::-webkit-scrollbar-thumb:horizontal{width:10px;background-color:#000;-webkit-border-radius:3px;cursor:pointer}
+
+        #products-grid {
+            margin-top: 20px;
+        }
+
+        .list-group {
+            /*-webkit-box-shadow: none;*/
+            /*box-shadow: none;*/
+        }
+
+        @media (max-width: 768px) {
+            #category-tree {
+                position: static;
+                height: auto;
+            }
+        }
+
+    </style>
+{% endblock %}
 {% block body %}
-    <div class="col-lg-3">
-        <h1>Category list</h1>
-        <ul class="list-group">
-        {% for category in categories %}
-            <li class="list-group-item"> {{category.title}}
-                <ul class="list-group">
-                    <li class="list-group-item">{{ category.title }}</li>
-                </ul>
-            </li>
+    <div id="category-tree" class="col-md-2 col-xs-12 col-lg-2 col-sm-4"></div>
+    <div id="products-grid" class="col-md-10 col-xs-12 col-sm-8 col-lg-10 col-md-offset-2 col-sm-offset-4 col-lg-offset-2">
 
-        {% endfor %}
-        </ul>
-    </div>
-    <div class="col-lg-9">
-        <h1>Products list</h1>
-        <table class="table">
-            <thead>
-            <tr>
-                <th>Id</th>
-                <th>Name</th>
-                <th>Description</th>
-                <th>Dateofcreation</th>
-                <th>Dateoflastupdate</th>
-                <th>Isactive</th>
-                <th>Uniqueidentifier</th>
-            </tr>
-            </thead>
-            <tbody>
-            {% for product in products %}
-                <tr>
-                    <td><a href="{{ path('product_show', { 'id': product.id }) }}">{{ product.id }}</a></td>
-                    <td>{{ product.name }}</td>
-                    <td>{{ product.description }}</td>
-                    <td>{% if product.dateOfCreation %}{{ product.dateOfCreation|date('Y-m-d H:i:s') }}{% endif %}</td>
-                    <td>{% if product.dateOfLastUpdate %}{{ product.dateOfLastUpdate|date('Y-m-d H:i:s') }}{% endif %}</td>
-                    <td>{% if product.isActive %}Yes{% else %}No{% endif %}</td>
-                    <td>{{ product.uniqueIdentifier }}</td>
-                </tr>
-            {% endfor %}
-            </tbody>
-        </table>
+        <div id="products" class="row list-group">
+            <div class="item col-xs-12 col-md-6 col-lg-4">
+                <div class="thumbnail">
+                    <img class="group list-group-image" src="http://placehold.it/400x250/000/fff" alt="" />
+                    <div class="caption">
+                        <h4 class="group inner list-group-item-heading">
+                            Product title</h4>
+                        <p class="group inner list-group-item-text">
+                            Product description... Lorem ipsum dolor sit amet, consectetuer adipiscing elit,
+                            sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.</p>
+                        <div class="row">
+                            <div class="col-xs-12 col-md-6">
+                                <p class="lead">
+                                    $21.000</p>
+                            </div>
+                            <div class="col-xs-12 col-md-6">
+                                <a class="btn btn-success" href="http://www.jquery2dotnet.com">Add to cart</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="item col-xs-12 col-md-6 col-lg-4">
+                <div class="thumbnail">
+                    <img class="group list-group-image" src="http://placehold.it/400x250/000/fff" alt="" />
+                    <div class="caption">
+                        <h4 class="group inner list-group-item-heading">
+                            Product title</h4>
+                        <p class="group inner list-group-item-text">
+                            Product description... Lorem ipsum dolor sit amet, consectetuer adipiscing elit,
+                            sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.</p>
+                        <div class="row">
+                            <div class="col-xs-12 col-md-6">
+                                <p class="lead">
+                                    $21.000</p>
+                            </div>
+                            <div class="col-xs-12 col-md-6">
+                                <a class="btn btn-success" href="http://www.jquery2dotnet.com">Add to cart</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="item col-xs-12 col-md-6 col-lg-4">
+                <div class="thumbnail">
+                    <img class="group list-group-image" src="http://placehold.it/400x250/000/fff" alt="" />
+                    <div class="caption">
+                        <h4 class="group inner list-group-item-heading">
+                            Product title</h4>
+                        <p class="group inner list-group-item-text">
+                            Product description... Lorem ipsum dolor sit amet, consectetuer adipiscing elit,
+                            sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.</p>
+                        <div class="row">
+                            <div class="col-xs-12 col-md-6">
+                                <p class="lead">
+                                    $21.000</p>
+                            </div>
+                            <div class="col-xs-12 col-md-6">
+                                <a class="btn btn-success" href="http://www.jquery2dotnet.com">Add to cart</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
 
+
+    <script>
+
+        $.fn.catalogBuilder = function(options) {
+
+            var rootElement = this[0]; //root element for appending
+            rootElement.setAttribute('tree-level', '2');
+
+            var ulClassCSS = 'tree-list';
+            var liClassCSS = 'tree-item';
+            var liControlOpenCSS = 'tree-item-control-opened';
+            var liControlCloseCSS = 'tree-item-control-closed';
+            var activeLi;
+
+
+            initializeBaseElements();
+
+            rootElement.onclick = function (event) {
+                delegateClick(event);
+            }
+
+
+
+            buildCategoryTree(null, rootElement);
+
+            function initializeBaseElements() {
+
+
+            }
+
+            function generateSplitter(level) {
+                var splitter = '&nbsp;&nbsp;';
+                var completeSplitter = '';
+                for (var i = 0; i<level; i++) {
+                    completeSplitter += splitter;
+                }
+                return completeSplitter;
+            }
+
+
+            function buildCategoryTree(categoryId, parent) {
+                $.getJSON('ajax/category/'+categoryId, function(JSON_Data) {
+                    var listItemStyle = 'item tree-item-control-closed';
+                    var listStyle = 'tree-list';
+
+                    var categoryList = document.createElement('ul');
+                    categoryList.setAttribute('class', listStyle);
+
+                    $.each(JSON_Data, function(index, element) {
+
+                        var categoryListItem = createLi(element.children, element.id, element.title,
+                            parent.getAttribute('tree-level'));
+
+
+                        categoryListItem.setAttribute('category_id', element.id);
+
+
+                        categoryList.appendChild(categoryListItem);
+
+
+                    });
+                    parent.appendChild(categoryList);
+                })
+            }
+
+            function createUl() {
+                var ul = document.createElement('ul');
+            }
+
+            function createLi(expandable, categoryID, categoryTitle, treeLevel) {
+
+                var li = document.createElement('li');
+                var expandLevel = parseInt(treeLevel)+1;
+
+                li.setAttribute('expanded', 'false');
+                li.setAttribute('downloaded', 'false');
+                li.setAttribute('category_id', categoryID);
+                li.setAttribute('tree-level', expandLevel.toString());
+                li.classList.add(liClassCSS);
+                li.innerHTML = generateSplitter(treeLevel) + categoryTitle + generateSplitter(2);
+
+                if (expandable === false) {
+
+                    li.setAttribute('childs', 'false');
+
+                } else if (expandable === true) {
+
+                    li.setAttribute('childs', 'true');
+                    li.classList.add(liControlCloseCSS);
+
+                }
+
+                return li;
+            }
+
+            function delegateClick(event) {
+                var target = event.target;
+
+                if (target.tagName !== "DIV" && target.tagName !== "UL") {
+                    sendProductsRequest(target);
+
+                    var expand = target.getAttribute('expanded');
+                    var download = target.getAttribute('downloaded');
+
+                    if (target.getAttribute('childs') === 'false') {
+                        return;
+                    }
+
+                    if (expand === 'false' && download === 'false') {
+                        //if rolled up and not downloaded
+                        target.setAttribute('expanded', 'true');
+                        target.setAttribute('downloaded', 'true');
+                        buildCategoryTree(target.getAttribute('category_id'), event.target);
+                        toggleClasses(target, liControlCloseCSS, liControlOpenCSS);
+                    } else if (expand === 'true' && download === 'true') {
+                        //if expanded and downloaded
+                        target.setAttribute('expanded', 'false');
+                        (target.getElementsByTagName('ul')[0]).classList.add('inactive');
+                        toggleClasses(target, liControlCloseCSS, liControlOpenCSS);
+                    } else if (expand === 'false' && download === 'true') {
+                        //if rolled up and downloaded
+                        target.setAttribute('expanded', 'true');
+                        (target.getElementsByTagName('ul')[0]).classList.remove('inactive');
+                        toggleClasses(target, liControlCloseCSS, liControlOpenCSS);
+                    }
+                }
+            }
+
+            function toggleClasses(target ,firstClass, secondClass) {
+                target.classList.toggle(firstClass);
+                target.classList.toggle(secondClass);
+                return target;
+            }
+
+            function sendProductsRequest(node) {
+                if (activeLi === node) {
+                    return;
+                } else {
+
+                    if (activeLi) {
+                        activeLi.classList.remove('tree-item-active');
+                    }
+                    activeLi = node;
+                    activeLi.classList.add('tree-item-active');
+                    //ajax request here!
+
+                }
+            }
+
+
+
+
+            function addOnClick(element) {
+                element.onclick = function (event) {
+//                    event.stopPropagation();
+                    var target = event.target;
+                    var expand = target.getAttribute('expanded');
+                    var download = target.getAttribute('downloaded');
+                    if (target.getAttribute('childs') === 'false') {
+                        return;
+                    }
+                    if (expand === 'false' && download === 'false') {
+                        target.setAttribute('expanded', 'true');
+                        target.setAttribute('downloaded', 'true');
+                        buildCategoryTree(target.getAttribute('category_id'), event.target);
+                        target.classList.remove('tree-item-control-closed');
+                        target.classList.add('tree-item-control-opened');
+                    } else if (expand === 'true' && download === 'true') {
+                        target.setAttribute('expanded', 'false');
+                        (target.getElementsByTagName('ul')[0]).classList.add('inactive');
+                        target.classList.add('tree-item-control-closed');
+                        target.classList.remove('tree-item-control-opened');
+                    } else if (expand === 'false' && download === 'true') {
+                        target.setAttribute('expanded', 'true');
+                        (target.getElementsByTagName('ul')[0]).classList.remove('inactive');
+                        target.classList.remove('tree-item-control-closed');
+                        target.classList.add('tree-item-control-opened');
+                    }
+                }
+            }
+
+        }
+
+        $("#category-tree").catalogBuilder();
+
+
+
+
+    </script>
 {% endblock %}
