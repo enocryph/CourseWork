@@ -424,18 +424,6 @@
             }
 
 
-//            <div class="item col-xs-12 col-md-6 col-lg-4">
-//                <a class="product-link" href=""><div class="thumbnail">
-//                <img class="group list-group-image" src="http://placehold.it/400x250/000/fff" alt="" />
-//                <div class="caption">
-//                <h4 class="group inner list-group-item-heading text-center">
-//                Product title
-//            </h4>
-//            </div>
-//            </div>
-//            </a>
-//            </div>
-
             function createProductView(element) {
                 var imageLink = 'http://127.0.0.1:8000/uploads/images/';
                 var container = document.createElement('div');
@@ -460,7 +448,7 @@
             }
 
             function getProductsAjax(categoryId) {
-                productsGrid.empty();
+                deleteChilds(productsGrid);
                 $.getJSON('ajax/product',{
                 category: categoryId
                  }, function(JSON_Data) {
@@ -469,6 +457,13 @@
                         productsGrid.appendChild(product);
                     });
                 });
+            }
+
+            function deleteChilds(element) {
+                while (element.firstChild) {
+                    element.removeChild(element.firstChild);
+                }
+                return element;
             }
 
 
@@ -531,11 +526,10 @@
                 var target = event.target;
 
                 if (target.tagName !== "DIV" && target.tagName !== "UL") {
-                    sendProductsRequest(target);
 
                     var expand = target.getAttribute('expanded');
                     var download = target.getAttribute('downloaded');
-
+                    sendProductsRequest(target);
                     if (target.getAttribute('childs') === 'false') {
                         return;
                     }
@@ -557,6 +551,7 @@
                         (target.getElementsByTagName('ul')[0]).classList.remove('inactive');
                         toggleClasses(target, liControlCloseCSS, liControlOpenCSS);
                     }
+
                 }
             }
 
@@ -577,7 +572,7 @@
                     activeLi = node;
                     activeLi.classList.add('tree-item-active');
                     //ajax request here!
-                    getProductsAjax(activeLi.getParameter('category_id'));
+                    getProductsAjax(activeLi.getAttribute('category_id'));
 
                 }
             }
