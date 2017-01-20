@@ -1,6 +1,9 @@
 {% extends 'base.html.twig' %}
 {% block stylesheets %}
     <style>
+        body {
+            background: #fafafa;
+        }
         .inactive {
             display: none;
         }
@@ -13,13 +16,17 @@
             -ms-user-select: none;
             user-select: none;
             /*background: #79a002;*/
-            background: #eb9316;
-            color: #fff;
+            background: #ebebeb;
+            /*background: #eb9316;*/
+            color: #000;
             transition: .5s;
+            font-size: 16px;
+            cursor: pointer;
         }
         
         .tree-item:hover {
             /*background: #8dae17;*/
+            /*background: #ee9f30;*/
             background: #ee9f30;
             transition: .5s;
         }
@@ -56,7 +63,7 @@
             /*width: 300px;*/
             padding: 0;
             height: 100vh;
-            background: #eb9316;
+            background: #ebebeb;
             position: fixed;
             overflow-y: auto;
             overflow-x: auto;
@@ -64,11 +71,11 @@
         }
         
         .tree-item-active {
-            background: #000;
+            background: #eb9316;
         }
 
         .tree-item-active:hover {
-            background: #000;
+            background: #ee9f30;
         }
         #category-tree::-webkit-scrollbar{width:10px;height:5px;cursor:pointer}
         #category-tree::-webkit-scrollbar-track-piece{background:#eb9316;-webkit-border-radius:3px}
@@ -214,6 +221,39 @@
             }
         }
 
+        .product-image {
+            max-width: 400px;
+            max-height: 250px;
+            object-fit: cover;
+        }
+
+        .product-caption {
+            font-size: 24px;
+            color: #000;
+            border-bottom: 1px solid transparent;
+            padding: 10px;
+        }
+
+        .product-link:hover {
+            text-decoration: none;
+        }
+
+        .product-caption:hover {
+            color: #fff;
+        }
+
+        .product-caption-span {
+            color: #000;
+            border-bottom: 2px solid transparent;
+            transition: .6s;
+        }
+
+        .product-link:hover .product-caption-span {
+            color: #000;
+            border-bottom: 2px solid #ee9f30;
+            transition: .6s;
+        }
+
 
     </style>
 {% endblock %}
@@ -312,7 +352,7 @@
 
             <div class="item col-xs-12 col-md-6 col-lg-4">
                 <div class="thumbnail">
-                    <img class="group list-group-image" src="http://placehold.it/400x250/000/fff" alt="" />
+                    <img class="group list-group-image product-image" src="http://placehold.it/400x250/000/fff" alt="" />
                     <div class="caption">
                         <h4 class="group inner list-group-item-heading">
                             Product title</h4>
@@ -427,22 +467,30 @@
             function createProductView(element) {
                 var imageLink = 'http://127.0.0.1:8000/uploads/images/';
                 var container = document.createElement('div');
+                var thumbnail = document.createElement('div');
+                thumbnail.setAttribute('class', 'thumbnail');
                 container.setAttribute('class', 'item col-xs-12 col-md-6 col-lg-4');
                 var captionContainer = document.createElement('div');
                 captionContainer.setAttribute('class', 'caption');
                 var caption = document.createElement('h4');
-                caption.setAttribute('class', 'group inner list-group-item-heading text-center');
+                caption.setAttribute('class', 'group inner list-group-item-heading text-center product-caption');
                 var productLink = document.createElement('a');
-                productLink.setAttribute('href', imageLink+element.id);
+                productLink.setAttribute('href', 'http://127.0.0.1:8000/product/'+element.id);
                 productLink.setAttribute('class', "product-link");
                 var productImage = document.createElement('img');
                 productImage.setAttribute('src', imageLink+element.image);
-                productImage.setAttribute('class', "group list-group-image");
+                productImage.setAttribute('class', "group list-group-image product-image");
+                var productCaptionSpan = document.createElement('span');
+                productCaptionSpan.setAttribute('class', 'product-caption-span');
+                productCaptionSpan.innerHTML = element.name;
 
-                container.appendChild(productLink);
-                container.appendChild(productImage);
+
+                caption.appendChild(productCaptionSpan);
                 captionContainer.appendChild(caption);
-                container.appendChild(captionContainer);
+                thumbnail.appendChild(productImage);
+                thumbnail.appendChild(caption);
+                productLink.appendChild(thumbnail);
+                container.appendChild(productLink);
 
                 return container;
             }
