@@ -13,6 +13,10 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Doctrine\Common\Collections\ArrayCollection;
 use AppBundle\Entity\RecursiveCategoryIterator;
 
+/**
+ * @Route("catalog")
+ */
+
 class CatalogController extends Controller
 {
     /**
@@ -30,7 +34,7 @@ class CatalogController extends Controller
         ));
     }
     /**
-     * @Route("category/catalog/ajax/category/{id}", name="category_ajax")
+     * @Route("/ajax/category/{id}", name="category_ajax")
      * @Method("GET")
      */
     public function categoryAjaxAction($id)
