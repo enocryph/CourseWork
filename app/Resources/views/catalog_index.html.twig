@@ -3,6 +3,7 @@
     <style>
         body {
             background: #fafafa;
+            font-family: 'Jura', sans-serif;
         }
         .inactive {
             display: none;
@@ -19,11 +20,11 @@
             background: #ebebeb;
             /*background: #eb9316;*/
             color: #000;
-            transition: .5s;
+            transition: .25s;
             font-size: 16px;
             cursor: pointer;
         }
-        
+
         .tree-item:hover {
             /*background: #8dae17;*/
             /*background: #ee9f30;*/
@@ -65,11 +66,12 @@
             height: 100vh;
             background: #ebebeb;
             position: fixed;
+            z-index: 1000;
             overflow-y: auto;
             overflow-x: auto;
 
         }
-        
+
         .tree-item-active {
             background: #eb9316;
         }
@@ -77,9 +79,9 @@
         .tree-item-active:hover {
             background: #ee9f30;
         }
-        #category-tree::-webkit-scrollbar{width:10px;height:5px;cursor:pointer}
+        #category-tree::-webkit-scrollbar{width:10px;height:10px;cursor:pointer}
         #category-tree::-webkit-scrollbar-track-piece{background:#eb9316;-webkit-border-radius:3px}
-        #category-tree::-webkit-scrollbar-thumb:vertical{height:5px;background-color: #444444;-webkit-border-radius:3px;cursor:pointer}
+        #category-tree::-webkit-scrollbar-thumb:vertical{height:10px;background-color: #444444;-webkit-border-radius:3px;cursor:pointer}
         #category-tree::-webkit-scrollbar-thumb:horizontal{width:10px;background-color:#000;-webkit-border-radius:3px;cursor:pointer}
 
         #products-grid {
@@ -129,12 +131,12 @@
             box-shadow: inset 0px -4px 0px 0px #bbb;
         }
         .zui-pager .btn-group__item .current {
-            box-shadow: inset 0px -4px 0px 0px #739600;
-            color: #739600;
+            box-shadow: inset 0px -4px 0px 0px #ee9f30;
+            color: #ee9f30;
             font-weight: bold;
         }
         .zui-pager .btn-group__item .current:hover {
-            box-shadow: inset 0px -4px 0px 0px #739600;
+            box-shadow: inset 0px -4px 0px 0px #ee9f30;
             cursor: default;
         }
         .zui-pager .btn[disabled] {
@@ -210,6 +212,10 @@
             width: 100%;
         }
 
+        .zui-pager {
+            margin: 0;
+        }
+
         @media (max-width: 768px) {
             #category-tree {
                 position: static;
@@ -221,10 +227,19 @@
             }
         }
 
-        .product-image {
-            max-width: 400px;
+        .thumbnail {
+            overflow: hidden;
+            position: relative;
+            object-fit: contain;
+        }
+
+        .thumbnail .product-image {
+            display: inline-block;
+            width: 100%;
+            height: 100%;
             max-height: 250px;
-            object-fit: cover;
+            min-height: 250px;
+            object-fit: contain;
         }
 
         .product-caption {
@@ -262,167 +277,41 @@
     <div id="products-grid" class="col-md-10 col-xs-12 col-sm-8 col-lg-10 col-md-offset-2
     col-sm-offset-4 col-lg-offset-2">
 
-        <div id="products" class="row list-group">
-            <div class="item col-xs-12 col-md-6 col-lg-4">
-                <div class="thumbnail">
-                    <img class="group list-group-image" src="http://placehold.it/400x250/000/fff" alt="" />
-                    <div class="caption">
-                        <h4 class="group inner list-group-item-heading">
-                            Product title</h4>
-                        <p class="group inner list-group-item-text">
-                            Product description... Lorem ipsum dolor sit amet, consectetuer adipiscing elit,
-                            sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.</p>
-                        <div class="row">
-                            <div class="col-xs-12 col-md-6">
-                                <p class="lead">
-                                    $21.000</p>
-                            </div>
-                            <div class="col-xs-12 col-md-6">
-                                <a class="btn btn-success" href="http://www.jquery2dotnet.com">Add to cart</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="item col-xs-12 col-md-6 col-lg-4">
-                <div class="thumbnail">
-                    <img class="group list-group-image" src="http://placehold.it/400x250/000/fff" alt="" />
-                    <div class="caption">
-                        <h4 class="group inner list-group-item-heading">
-                            Product title</h4>
-                        <p class="group inner list-group-item-text">
-                            Product description... Lorem ipsum dolor sit amet, consectetuer adipiscing elit,
-                            sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.</p>
-                        <div class="row">
-                            <div class="col-xs-12 col-md-6">
-                                <p class="lead">
-                                    $21.000</p>
-                            </div>
-                            <div class="col-xs-12 col-md-6">
-                                <a class="btn btn-success" href="http://www.jquery2dotnet.com">Add to cart</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="item col-xs-12 col-md-6 col-lg-4">
-                <div class="thumbnail">
-                    <img class="group list-group-image" src="http://placehold.it/400x250/000/fff" alt="" />
-                    <div class="caption">
-                        <h4 class="group inner list-group-item-heading">
-                            Product title</h4>
-                        <p class="group inner list-group-item-text">
-                            Product description... Lorem ipsum dolor sit amet, consectetuer adipiscing elit,
-                            sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.</p>
-                        <div class="row">
-                            <div class="col-xs-12 col-md-6">
-                                <p class="lead">
-                                    $21.000</p>
-                            </div>
-                            <div class="col-xs-12 col-md-6">
-                                <a class="btn btn-success" href="http://www.jquery2dotnet.com">Add to cart</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="item col-xs-12 col-md-6 col-lg-4">
-                <div class="thumbnail">
-                    <img class="group list-group-image" src="http://placehold.it/400x250/000/fff" alt="" />
-                    <div class="caption">
-                        <h4 class="group inner list-group-item-heading">
-                            Product title</h4>
-                        <p class="group inner list-group-item-text">
-                            Product description... Lorem ipsum dolor sit amet, consectetuer adipiscing elit,
-                            sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.</p>
-                        <div class="row">
-                            <div class="col-xs-12 col-md-6">
-                                <p class="lead">
-                                    $21.000</p>
-                            </div>
-                            <div class="col-xs-12 col-md-6">
-                                <a class="btn btn-success" href="http://www.jquery2dotnet.com">Add to cart</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="item col-xs-12 col-md-6 col-lg-4">
-                <div class="thumbnail">
-                    <img class="group list-group-image product-image" src="http://placehold.it/400x250/000/fff" alt="" />
-                    <div class="caption">
-                        <h4 class="group inner list-group-item-heading">
-                            Product title</h4>
-                        <p class="group inner list-group-item-text">
-                            Product description... Lorem ipsum dolor sit amet, consectetuer adipiscing elit,
-                            sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.</p>
-                        <div class="row">
-                            <div class="col-xs-12 col-md-6">
-                                <p class="lead">
-                                    $21.000</p>
-                            </div>
-                            <div class="col-xs-12 col-md-6">
-                                <a class="btn btn-success" href="http://www.jquery2dotnet.com">Add to cart</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="item col-xs-12 col-md-6 col-lg-4">
-                <a class="product-link" href=""><div class="thumbnail">
-                    <img class="group list-group-image" src="http://placehold.it/400x250/000/fff" alt="" />
-                    <div class="caption">
-                        <h4 class="group inner list-group-item-heading text-center">
-                            Product title
-                        </h4>
-                    </div>
-                </div>
-                </a>
-            </div>
-
-            <div class="zui-pager col-md-10 col-xs-12 col-sm-8 col-lg-10 col-md-offset-2
-    col-sm-offset-4 col-lg-offset-2 text-center">
-                <ol class="btn-group">
-                    <li class="btn-group__item">
-                        <i class="i-chevron-left"></i>
-                    </li>
-                    <li class="btn-group__item">
-                        <button class="btn btn--basic current">1</button>
-                    </li>
-                    <li class="btn-group__item">
-                        <button class="btn btn--basic" disabled="disabled" style="display: none;">...</button>
-                    </li>
-                    <li class="btn-group__item">
-                        <button class="btn btn--basic"><span>2</span></button>
-                    </li>
-                    <li class="btn-group__item">
-                        <button class="btn btn--basic"><span>3</span></button>
-                    </li>
-                    <li class="btn-group__item">
-                        <button class="btn btn--basic"><span>4</span></button>
-                    </li>
-                    <li class="btn-group__item">
-                        <button class="btn btn--basic"><span>5</span></button>
-                    </li>
-                    <li class="btn-group__item">
-                        <button class="btn btn--basic" disabled="disabled">...</button>
-                    </li>
-                    <li class="btn-group__item">
-                        <button class="btn btn--basic"><span>40</span></button>
-                    </li>
-                    <li class="btn-group__item">
-                        <i class="i-chevron-right"></i>
-                    </li>
-                </ol>
-            </div>
-
-
     </div>
-
+    <div class="zui-pager col-md-12 col-xs-12 col-sm-12 col-lg-12 text-center">
+        <ol class="btn-group">
+            <li class="btn-group__item">
+                <i class="i-chevron-left"></i>
+            </li>
+            <li class="btn-group__item">
+                <button class="btn btn--basic current">1</button>
+            </li>
+            <li class="btn-group__item">
+                <button class="btn btn--basic" disabled="disabled" style="display: none;">...</button>
+            </li>
+            <li class="btn-group__item">
+                <button class="btn btn--basic"><span>2</span></button>
+            </li>
+            <li class="btn-group__item">
+                <button class="btn btn--basic"><span>3</span></button>
+            </li>
+            <li class="btn-group__item">
+                <button class="btn btn--basic"><span>4</span></button>
+            </li>
+            <li class="btn-group__item">
+                <button class="btn btn--basic"><span>5</span></button>
+            </li>
+            <li class="btn-group__item">
+                <button class="btn btn--basic" disabled="disabled">...</button>
+            </li>
+            <li class="btn-group__item">
+                <button class="btn btn--basic"><span>40</span></button>
+            </li>
+            <li class="btn-group__item">
+                <i class="i-chevron-right"></i>
+            </li>
+        </ol>
+    </div>
 
     <script>
 
@@ -432,28 +321,24 @@
             rootElement.setAttribute('tree-level', '2');
             var productsGrid = document.getElementById('products-grid');
 
+            var productViewLink = 'http://127.0.0.1:8000/product/';
+            var imagesStorageLink = 'http://127.0.0.1:8000/uploads/images/';
             var ulClassCSS = 'tree-list';
             var liClassCSS = 'tree-item';
             var liControlOpenCSS = 'tree-item-control-opened';
             var liControlCloseCSS = 'tree-item-control-closed';
-            var activeLi;
+            var ajaxProductLink = 'ajax/product';
+            var ajaxCategoryLink = 'ajax/category/';
 
-
-            initializeBaseElements();
+            var activeLi; //variable for delegation
 
             rootElement.onclick = function (event) {
                 delegateClick(event);
             }
 
-
-
             buildCategoryTree(null, rootElement);
-
-            function initializeBaseElements() {
-
-
-            }
-
+            getProductsAjax('');
+            
             function generateSplitter(level) {
                 var splitter = '&nbsp;&nbsp;';
                 var completeSplitter = '';
@@ -462,28 +347,28 @@
                 }
                 return completeSplitter;
             }
-
-
             function createProductView(element) {
-                var imageLink = 'http://127.0.0.1:8000/uploads/images/';
                 var container = document.createElement('div');
                 var thumbnail = document.createElement('div');
+                var captionContainer = document.createElement('div');
+                var caption = document.createElement('h4');
+                var productLink = document.createElement('a');
+                var productImage = document.createElement('img');
+                var productCaptionSpan = document.createElement('span');
+
                 thumbnail.setAttribute('class', 'thumbnail');
                 container.setAttribute('class', 'item col-xs-12 col-md-6 col-lg-4');
-                var captionContainer = document.createElement('div');
                 captionContainer.setAttribute('class', 'caption');
-                var caption = document.createElement('h4');
                 caption.setAttribute('class', 'group inner list-group-item-heading text-center product-caption');
-                var productLink = document.createElement('a');
-                productLink.setAttribute('href', 'http://127.0.0.1:8000/product/'+element.id);
+
+                productLink.setAttribute('href', productViewLink+element.id);
                 productLink.setAttribute('class', "product-link");
-                var productImage = document.createElement('img');
-                productImage.setAttribute('src', imageLink+element.image);
+
+                productImage.setAttribute('src', imagesStorageLink+element.image);
                 productImage.setAttribute('class', "group list-group-image product-image");
-                var productCaptionSpan = document.createElement('span');
+
                 productCaptionSpan.setAttribute('class', 'product-caption-span');
                 productCaptionSpan.innerHTML = element.name;
-
 
                 caption.appendChild(productCaptionSpan);
                 captionContainer.appendChild(caption);
@@ -494,56 +379,41 @@
 
                 return container;
             }
-
             function getProductsAjax(categoryId) {
                 deleteChilds(productsGrid);
-                $.getJSON('ajax/product',{
-                category: categoryId
-                 }, function(JSON_Data) {
+                $.getJSON(ajaxProductLink, {
+                    category: categoryId
+                }, function(JSON_Data) {
                     $.each(JSON_Data, function(index, element) {
                         var product = createProductView(element);
                         productsGrid.appendChild(product);
                     });
                 });
             }
-
             function deleteChilds(element) {
                 while (element.firstChild) {
                     element.removeChild(element.firstChild);
                 }
                 return element;
             }
-
-
             function buildCategoryTree(categoryId, parent) {
-                $.getJSON('ajax/category/'+categoryId, function(JSON_Data) {
-                    var listItemStyle = 'item tree-item-control-closed';
-                    var listStyle = 'tree-list';
-
-                    var categoryList = document.createElement('ul');
-                    categoryList.setAttribute('class', listStyle);
-
+                $.getJSON(ajaxCategoryLink + categoryId, function(JSON_Data) {
+                    var categoryList = createUl();
                     $.each(JSON_Data, function(index, element) {
-
                         var categoryListItem = createLi(element.children, element.id, element.title,
                             parent.getAttribute('tree-level'));
 
-
-                        categoryListItem.setAttribute('category_id', element.id);
-
-
                         categoryList.appendChild(categoryListItem);
-
-
                     });
                     parent.appendChild(categoryList);
                 })
             }
-
             function createUl() {
                 var ul = document.createElement('ul');
-            }
+                ul.setAttribute('class', ulClassCSS);
 
+                return ul;
+            }
             function createLi(expandable, categoryID, categoryTitle, treeLevel) {
 
                 var li = document.createElement('li');
@@ -557,19 +427,14 @@
                 li.innerHTML = generateSplitter(treeLevel) + categoryTitle + generateSplitter(2);
 
                 if (expandable === false) {
-
                     li.setAttribute('childs', 'false');
-
                 } else if (expandable === true) {
-
                     li.setAttribute('childs', 'true');
                     li.classList.add(liControlCloseCSS);
-
                 }
 
                 return li;
             }
-
             function delegateClick(event) {
                 var target = event.target;
 
@@ -602,13 +467,11 @@
 
                 }
             }
-
             function toggleClasses(target ,firstClass, secondClass) {
                 target.classList.toggle(firstClass);
                 target.classList.toggle(secondClass);
                 return target;
             }
-
             function sendProductsRequest(node) {
                 if (activeLi === node) {
                     return;
@@ -622,38 +485,6 @@
                     //ajax request here!
                     getProductsAjax(activeLi.getAttribute('category_id'));
 
-                }
-            }
-
-
-
-
-            function addOnClick(element) {
-                element.onclick = function (event) {
-//                    event.stopPropagation();
-                    var target = event.target;
-                    var expand = target.getAttribute('expanded');
-                    var download = target.getAttribute('downloaded');
-                    if (target.getAttribute('childs') === 'false') {
-                        return;
-                    }
-                    if (expand === 'false' && download === 'false') {
-                        target.setAttribute('expanded', 'true');
-                        target.setAttribute('downloaded', 'true');
-                        buildCategoryTree(target.getAttribute('category_id'), event.target);
-                        target.classList.remove('tree-item-control-closed');
-                        target.classList.add('tree-item-control-opened');
-                    } else if (expand === 'true' && download === 'true') {
-                        target.setAttribute('expanded', 'false');
-                        (target.getElementsByTagName('ul')[0]).classList.add('inactive');
-                        target.classList.add('tree-item-control-closed');
-                        target.classList.remove('tree-item-control-opened');
-                    } else if (expand === 'false' && download === 'true') {
-                        target.setAttribute('expanded', 'true');
-                        (target.getElementsByTagName('ul')[0]).classList.remove('inactive');
-                        target.classList.remove('tree-item-control-closed');
-                        target.classList.add('tree-item-control-opened');
-                    }
                 }
             }
 
