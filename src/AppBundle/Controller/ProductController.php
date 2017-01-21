@@ -48,17 +48,21 @@ class ProductController extends Controller
         $page=$request->get('page');
         $perpage=$request->get('perpage');
         $count=0;
-        $products=array();
         if ($request->get('sortbyfield'))
         {
             $products = $repository->createQueryBuilder('p')
                 ->orderBy('p.'.$request->get('sortbyfield'),$request->get('order'))
-                ->getQuery()->getResult();;
+                ->getQuery()->getResult();
+        } elseif ($request->get('filterbyfield')){
+            $products = $repository->createQueryBuilder('p')
+                ->where('p.'.$request->get('filterbyfield').' = :pattern')
+                ->setParameter('pattern', $request->get('pattern'))
+                ->getQuery()->getResult();
         } else {
             $products = $repository->findAll();
         }
         $responseProducts = array();
-        if (isset($products)!=0) {
+        if ($products) {
             $count=count($products);
             $products=array_slice($products,($page-1)*$perpage,$perpage);
             foreach ($products as $product) {
@@ -66,8 +70,9 @@ class ProductController extends Controller
                     'id'=>$product->getId(),
                     'name'=>$product->getName(),
                     'description'=>$product->getDescription(),
-                    'dateOfCreation'=>$product->getDateOfCreation(),
-                    'dateOfLastUpdate'=>$product->getDateOfLastUpdate(),
+                    'dateOfCreation'=>$product->getDateOfCreation()->format( 'd-m-Y H:i:s' ),
+                    'dateOfLastUpdate'=>$product->getDateOfLastUpdate()->format( 'd-m-Y H:i:s' ),
+                    'isActive'=>$product->getIsActive(),
                     'SKU'=>$product->getUniqueIdentifier(),
                     'image'=>$product->getImage(),
                 );
