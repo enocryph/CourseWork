@@ -307,23 +307,37 @@
             var paginationUlCSS = 'btn-group';
             var paginationLiCSS = 'btn-group__item'
             var activeLi; //variable for delegation
-            var activeCategory ='';
+            var activeCategory = '';
             var activePaginator;
             var activePaginatorNumber = 1;
             var elementsInDatabase;
 
-            var paginationButtons = 1;
-            var paginatorElementsOnPage = 2;
+            var paginationButtons = 2;
+            var paginatorElementsOnPage = 3;
             var paginationButtonsCount;
-
 
             rootElement.onclick = function (event) {
                 delegateClick(event);
+            }
+            paginationWrapper.onclick = function (event) {
+                delegatePaginationClick(event);
             }
 
             //initial requests
             buildCategoryTree(null, rootElement);
             getProductsAjax();
+
+            function checkForEmpty(count) {
+                if (count) {
+                    return;
+                }
+
+                else {
+                    var h2 = document.createElement('h2');
+                    h2.innerHTML = 'There is no products here';
+                    productsGrid.appendChild(h2);
+                }
+            }
 
             function generateSplitter(level) {
                 var splitter = '&nbsp;&nbsp;';
@@ -365,12 +379,8 @@
 
                 return container;
             }
-
             function getProductsAjax() {
                 deleteChilds(productsGrid);
-                console.log(activeCategory);
-                console.log(activePaginatorNumber);
-                console.log(paginatorElementsOnPage);
                 $.getJSON(ajaxProductLink, {
                     category: activeCategory,
                     page: activePaginatorNumber,
@@ -378,6 +388,7 @@
                 }, function(JSON_Data) {
                     var products = JSON_Data.products;
                     elementsInDatabase = JSON_Data.count;
+                    checkForEmpty(elementsInDatabase);
                     createPaginationView(paginatorElementsOnPage, elementsInDatabase,
                         paginationButtons, activePaginatorNumber, activePaginatorNumber);
                     $.each(products, function(index, element) {
@@ -436,7 +447,7 @@
                 var target = event.target;
 
                 if (target.tagName !== "DIV" && target.tagName !== "UL") {
-
+                    activePaginatorNumber = 1;
                     var expand = target.getAttribute('expanded');
                     var download = target.getAttribute('downloaded');
                     sendProductsRequest(target);
@@ -485,7 +496,6 @@
 
                 }
             }
-
             function createPaginationLi(number, active) {
                 var li = document.createElement('li');
                 li.setAttribute('class', paginationLiCSS);
@@ -521,7 +531,6 @@
 
                 return li;
             }
-
             function highlightPaginator(node) {
                 if (activePaginator) {
                     activePaginator.classList.remove('current');
@@ -560,9 +569,7 @@
 
             }
 
-            paginationWrapper.onclick = function (event) {
-                delegatePaginationClick(event);
-            }
+
 
             function createPaginationView(elementsOnPage, allElements, paginationButtonsOnPage, startElement,
                                           activeElement) {
@@ -594,33 +601,20 @@
                     var rightControl = createPaginationControl('right');
                     paginationList.appendChild(leftControl);
 
-                    if (startElement != 1) {
-                        paginationList.appendChild(createPaginationLi(1));
-                        if (startElement > 2) {
-                            paginationList.appendChild(createPaginationSplitter());
-                        }
-                    }
 
-                    for (var i = 0; i < paginationButtonsOnPage; i++) {
+                    for (var i = 1; i <= paginationButtonsCount; i++) {
 
                         var li;
-                        if (i + startElement === activeElement) {
-                            li = createPaginationLi(i + startElement, 'true');
+                        if (i === activeElement) {
+                            li = createPaginationLi(i, 'true');
                         } else {
-                            li = createPaginationLi(i + startElement);
+                            li = createPaginationLi(i);
                         }
                         paginationList.appendChild(li);
 
                     }
 
-                    if (startElement + paginationButtonsOnPage <= paginationButtonsCount) {
-                        if (!(startElement + paginationButtonsOnPage == paginationButtonsCount)) {
-                            paginationList.appendChild(createPaginationSplitter());
-                        }
 
-
-                        paginationList.appendChild(createPaginationLi(paginationButtonsCount));
-                    }
 
                     paginationList.appendChild(rightControl);
                 }
