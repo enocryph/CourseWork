@@ -308,12 +308,13 @@
             var ajaxProductLink = 'ajax/product';
             var ajaxCategoryLink = 'ajax/category/';
 
+            var activeLi; //variable for delegation
+            var activeCategory = '';
 
             var paginationWrapper = document.getElementById('pagination-wrapper');
             var paginationUlCSS = 'btn-group';
             var paginationLiCSS = 'btn-group__item'
-            var activeLi; //variable for delegation
-            var activeCategory = '';
+
             var activePaginator;
             var activePaginatorNumber = 1;
             var elementsInDatabase;
@@ -344,7 +345,6 @@
                     productsGrid.appendChild(h2);
                 }
             }
-
             function generateSplitter(level) {
                 var splitter = '&nbsp;&nbsp;';
                 var completeSplitter = '';
@@ -502,6 +502,7 @@
 
                 }
             }
+
             function createPaginationLi(number, active) {
                 var li = document.createElement('li');
                 li.setAttribute('class', paginationLiCSS);
@@ -525,18 +526,7 @@
 
                 return li;
             }
-            function createPaginationSplitter() {
-                var li = document.createElement('li');
-                li.setAttribute('class', paginationLiCSS);
-                li.setAttribute('splitter', 'true');
-                var button = document.createElement('button');
-                button.setAttribute('class', 'btn btn--basic');
-                button.setAttribute('disabled', 'disabled');
-                button.innerHTML = '...';
-                li.appendChild(button);
 
-                return li;
-            }
             function highlightPaginator(node) {
                 if (activePaginator) {
                     activePaginator.classList.remove('current');
@@ -574,8 +564,6 @@
 
 
             }
-
-
 
             function createPaginationView(elementsOnPage, allElements, paginationButtonsOnPage, startElement,
                                           activeElement) {
@@ -631,6 +619,18 @@
 
             }
 
+            function createPaginationSplitter() {
+                var li = document.createElement('li');
+                li.setAttribute('class', paginationLiCSS);
+                li.setAttribute('splitter', 'true');
+                var button = document.createElement('button');
+                button.setAttribute('class', 'btn btn--basic');
+                button.setAttribute('disabled', 'disabled');
+                button.innerHTML = '...';
+                li.appendChild(button);
+
+                return li;
+            }
         }
 
         $("#category-tree").catalogBuilder();

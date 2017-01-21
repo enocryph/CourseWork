@@ -1,46 +1,168 @@
 {% extends 'base.html.twig' %}
+{% block stylesheets %}
+<style>
+    .zui-pager {
+        margin: 5em;
+    }
+    .zui-pager--center {
+        text-align: center;
+    }
+    .zui-pager--right {
+        text-align: right;
+    }
+    .zui-pager .btn-group {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+        display: inline-block;
+    }
+    .zui-pager .btn-group__item {
+        display: inline-block;
+        margin: 0;
+        padding: 0;
+        height: 40px;
+        float: left;
+    }
+    .zui-pager .btn-group__item .btn {
+        margin: 0;
+        padding: .5em 1em;
+        border: 0;
+        font-weight: 300;
+        background-color: transparent;
+        box-shadow: inset 0px -2px 0px 0px #bbb;
+        color: #000;
+        outline: none;
+    }
+    .zui-pager .btn-group__item .btn:hover {
+        box-shadow: inset 0px -4px 0px 0px #bbb;
+    }
+    .zui-pager .btn-group__item .current {
+        box-shadow: inset 0px -4px 0px 0px #ee9f30;
+        color: #ee9f30;
+        font-weight: bold;
+    }
+    .zui-pager .btn-group__item .current:hover {
+        box-shadow: inset 0px -4px 0px 0px #ee9f30;
+        cursor: default;
+    }
+    .zui-pager .btn[disabled] {
+        box-shadow: inset 0px -2px 0px 0px #e6e6e6;
+        color: #1d1d1d;
+    }
+    .zui-pager .btn[disabled]:hover {
+        box-shadow: inset 0px -2px 0px 0px #e6e6e6;
+        cursor: default;
+    }
+    .zui-pager__input {
+        display: inline-block;
+        vertical-align: top;
+        margin-left: 10px;
+    }
+    .zui-pager__input > input {
+        width: 2em;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 0;
+        line-height: 1;
+    }
+    .zui-pager .i-chevron-left,
+    .zui-pager .i-chevron-right {
+        margin: 15px;
+        border-style: solid;
+        border-color: #3a3a3a;
+        width: 6px;
+        height: 6px;
+        display: block;
+        cursor: pointer;
+    }
+    .zui-pager .i-chevron-left {
+        border-width: 1px 0 0 1px;
+        -webkit-transform: rotate(-45deg);
+        transform: rotate(-45deg);
+    }
+    .zui-pager .i-chevron-right {
+        border-width: 1px 1px 0 0;
+        -webkit-transform: rotate(45deg);
+        transform: rotate(45deg);
+    }
 
+    .i-caret-down {
+        border-width: 3px;
+        border-style: solid;
+        border-color: black transparent transparent transparent;
+        position: absolute;
+        top: 18px;
+        right: 3px;
+    }
+
+    .small .btn {
+        position: relative;
+        box-shadow: 0 0 0 transparent !important;
+        padding-right: 20px !important;
+        padding-left: 5px !important;
+    }
+    .small span:nth-of-type(1) {
+        font-weight: bold;
+        color: #739600;
+    }
+    .small span:nth-of-type(2) {
+        margin: 0 5px;
+    }
+    .small .select-overlay {
+        opacity: 0;
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        width: 100%;
+    }
+
+    .zui-pager {
+        margin: 0;
+    }
+
+    @media (max-width: 768px) {
+        #category-tree {
+            position: static;
+            height: auto;
+        }
+
+        .zui-pager {
+            margin: 0;
+        }
+    }
+
+    .table-header {
+        position: relative;
+        padding-left: 15px !important;
+        padding-right: 15px !important;
+    }
+
+    .table-header-top:after {
+        position: absolute;
+        width: 16px;
+        height: 16px;
+        right: 8px;
+        top: 12px;
+        background: url({{ asset('ajax-grid/img/arrow-down.png') }});
+        content: '';
+    }
+
+    .table-header-bottom:after {
+        position: absolute;
+        width: 16px;
+        height: 16px;
+        right: 8px;
+        top: 12px;
+        background: url({{ asset('ajax-grid/img/arrow-down.png') }});
+        content: '';
+    }
+
+</style>
+{% endblock %}
 {% block body %}
     <h1>Products list</h1>
-
-    <table>
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Name</th>
-                <th>Description</th>
-                <th>Dateofcreation</th>
-                <th>Dateoflastupdate</th>
-                <th>Isactive</th>
-                <th>Uniqueidentifier</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for product in products %}
-            <tr>
-                <td><a href="{{ path('product_show', { 'id': product.id }) }}">{{ product.id }}</a></td>
-                <td>{{ product.name }}</td>
-                <td>{{ product.description }}</td>
-                <td>{% if product.dateOfCreation %}{{ product.dateOfCreation|date('Y-m-d H:i:s') }}{% endif %}</td>
-                <td>{% if product.dateOfLastUpdate %}{{ product.dateOfLastUpdate|date('Y-m-d H:i:s') }}{% endif %}</td>
-                <td>{% if product.isActive %}Yes{% else %}No{% endif %}</td>
-                <td>{{ product.uniqueIdentifier }}</td>
-                <td>
-                    <ul>
-                        <li>
-                            <a href="{{ path('product_show', { 'id': product.id }) }}">show</a>
-                        </li>
-                        <li>
-                            <a href="{{ path('product_edit', { 'id': product.id }) }}">edit</a>
-                        </li>
-                    </ul>
-                </td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-
     <ul>
         <li>
             <a href="{{ path('product_new') }}">Create a new product</a>
@@ -51,16 +173,46 @@
 
     </div>
 
+    <div id="pagination-wrapper">
+
+    </div>
+
     <script>
 
         $.fn.ajaxgrid = function(options) {
-            var rootElement = this[0];
-            var table;
-            var tableBody;
-
-
             checkOptions(options);
 
+            var ajaxProductLink = options.dataUrl;
+
+            var rootElement = this[0];
+            var table;
+            var tableBody =document.createElement('tbody');
+
+            var paginationWrapper = document.getElementById('pagination-wrapper');
+            var paginationUlCSS = 'btn-group';
+            var paginationLiCSS = 'btn-group__item'
+
+            var activePaginator;
+            var activePaginatorNumber = 1;
+            var elementsInDatabase;
+
+            var paginationButtons = 3;
+            var paginatorElementsOnPage = options.rowsPerPage;
+            var paginationButtonsCount;
+
+
+
+            function checkForEmpty(count) {
+                if (count) {
+                    return;
+                }
+
+                else {
+                    var h2 = document.createElement('h2');
+                    h2.innerHTML = 'There is no products here';
+                    productsGrid.appendChild(h2);
+                }
+            }
             function checkOptions(options) {
                 if (!options.dataUrl) {
                     throw 'Wrong "dataUrl" exception';
@@ -77,14 +229,16 @@
             }
 
             rootElement.appendChild(createGridTable());
-
+            paginationWrapper.onclick = function (event) {
+                delegatePaginationClick(event);
+            }
 
             function createGridTable() {
                 table = document.createElement('table');
                 table.classList.add('table');
                 var tableHeader = createTableHeader();
-                console.log(tableHeader);
                 table.appendChild(tableHeader);
+                table.appendChild(tableBody);
                 return table;
             }
 
@@ -93,6 +247,7 @@
                 var tableRow = document.createElement('tr');
                     for (var i = 0; i < options.sortableColumns.length; i++) {
                         var tableHeader = document.createElement('th');
+                        tableHeader.classList.add('table-header');
 
                         for (var j = 0; j < options.filterableColumns.length; j++) {
                             if (options.sortableColumns[i] == options.filterableColumns[j]) {
@@ -127,6 +282,147 @@
                 }
 
                 return tableRow;
+            }
+
+
+
+            function createPaginationLi(number, active) {
+                var li = document.createElement('li');
+                li.setAttribute('class', paginationLiCSS);
+                var button = document.createElement('button');
+                button.setAttribute('class', 'btn btn--basic');
+                button.innerHTML = number;
+                if (active === 'true') {
+                    button.setAttribute('class', 'btn btn--basic current');
+                }
+                li.appendChild(button);
+
+                return li;
+            }
+            function createPaginationControl(type) {
+                var li = document.createElement('li');
+                li.setAttribute('class', paginationLiCSS);
+                var i = document.createElement('i');
+                i.setAttribute('class', 'i-chevron-'+type);
+                i.setAttribute('control', type);
+                li.appendChild(i);
+
+                return li;
+            }
+            function highlightPaginator(node) {
+                if (activePaginator) {
+                    activePaginator.classList.remove('current');
+                }
+                activePaginator = node;
+                activePaginator.classList.add('class', 'current');
+                activePaginatorNumber = parseInt(activePaginator.innerHTML);
+            }
+            function delegatePaginationClick(event) {
+                var target = event.target;
+
+                if (target.tagName === 'LI' || target.tagName === "DIV") {
+                    return;
+                } else if (target.tagName === 'I') {
+
+                    if (target.getAttribute('control') === 'left') {
+                        if (activePaginatorNumber - 1 == 0) {
+                            return;
+                        }
+                        activePaginatorNumber -= 1;
+                        getProductsAjax();
+                    } else if (target.getAttribute('control') === 'right') {
+                        if (activePaginatorNumber + 1 > paginationButtonsCount) {
+                            return false;
+                        }
+                        activePaginatorNumber += 1;
+                        getProductsAjax();
+                    }
+
+                } else if (target.tagName === 'BUTTON') {
+                    highlightPaginator(target);
+                    getProductsAjax();
+                }
+
+
+
+            }
+            function deleteChilds(element) {
+                while (element.firstChild) {
+                    element.removeChild(element.firstChild);
+                }
+                return element;
+            }
+            function createPaginationView(elementsOnPage, allElements, paginationButtonsOnPage, startElement,
+                                          activeElement) {
+                deleteChilds(paginationWrapper);
+                var paginationList = document.createElement('ol');
+                paginationList.setAttribute('class', paginationUlCSS);
+                if (allElements <= elementsOnPage) {
+                    return;
+                }
+
+                paginationButtonsCount = Math.ceil(allElements / elementsOnPage);
+
+                if (paginationButtonsCount <= paginationButtonsOnPage) {
+
+                    for (var i = 1; i <= paginationButtonsCount; i++) {
+
+                        var li;
+                        if (i === activeElement) {
+                            li = createPaginationLi(i, 'true');
+                        } else {
+                            li = createPaginationLi(i);
+                        }
+                        paginationList.appendChild(li);
+
+                    }
+
+                } else if (paginationButtonsCount > paginationButtonsOnPage) {
+                    var leftControl = createPaginationControl('left');
+                    var rightControl = createPaginationControl('right');
+                    paginationList.appendChild(leftControl);
+
+
+                    for (var i = 1; i <= paginationButtonsCount; i++) {
+
+                        var li;
+                        if (i === activeElement) {
+                            li = createPaginationLi(i, 'true');
+                        } else {
+                            li = createPaginationLi(i);
+                        }
+                        paginationList.appendChild(li);
+
+                    }
+
+
+
+                    paginationList.appendChild(rightControl);
+                }
+
+
+
+                paginationWrapper.appendChild(paginationList);
+
+            }
+            function getProductsAjax() {
+                deleteChilds(tableBody);
+                $.getJSON(ajaxProductLink, {
+                    category: activeCategory,
+                    page: activePaginatorNumber,
+                    perpage: paginatorElementsOnPage
+                }, function(JSON_Data) {
+                    var products = JSON_Data.products;
+                    elementsInDatabase = JSON_Data.count;
+                    checkForEmpty(elementsInDatabase);
+                    createPaginationView(paginatorElementsOnPage, elementsInDatabase,
+                        paginationButtons, activePaginatorNumber, activePaginatorNumber);
+                    $.each(products, function(index, element) {
+                        var product = createTableRow(element);
+                        tableBody.appendChild(product);
+                    });
+                });
+
             }
         }
 
