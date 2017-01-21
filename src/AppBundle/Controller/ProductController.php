@@ -73,7 +73,7 @@ class ProductController extends Controller
                     'dateOfCreation'=>$product->getDateOfCreation()->format( 'd-m-Y H:i:s' ),
                     'dateOfLastUpdate'=>$product->getDateOfLastUpdate()->format( 'd-m-Y H:i:s' ),
                     'isActive'=>$product->getIsActive(),
-                    'SKU'=>$product->getUniqueIdentifier(),
+                    'uniqueIdentifier'=>$product->getUniqueIdentifier(),
                     'image'=>$product->getImage(),
                 );
             }
