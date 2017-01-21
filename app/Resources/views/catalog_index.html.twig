@@ -314,6 +314,7 @@
 
             var paginationButtons = 1;
             var paginatorElementsOnPage = 2;
+            var paginationButtonsCount;
 
 
             rootElement.onclick = function (event) {
@@ -537,9 +538,15 @@
                 } else if (target.tagName === 'I') {
 
                     if (target.getAttribute('control') === 'left') {
+                        if (activePaginatorNumber - 1 == 0) {
+                            return;
+                        }
                         activePaginatorNumber -= 1;
                         getProductsAjax();
                     } else if (target.getAttribute('control') === 'right') {
+                        if (activePaginatorNumber + 1 > paginationButtonsCount) {
+                            return false;
+                        }
                         activePaginatorNumber += 1;
                         getProductsAjax();
                     }
@@ -566,7 +573,7 @@
                     return;
                 }
 
-                var paginationButtonsCount = Math.ceil(allElements / elementsOnPage);
+                paginationButtonsCount = Math.ceil(allElements / elementsOnPage);
 
                 if (paginationButtonsCount <= paginationButtonsOnPage) {
 
