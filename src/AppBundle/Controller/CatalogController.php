@@ -12,11 +12,11 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Doctrine\Common\Collections\ArrayCollection;
 use AppBundle\Entity\RecursiveCategoryIterator;
+
 /**
- * Category controller.
- *
  * @Route("catalog")
  */
+
 class CatalogController extends Controller
 {
     /**
@@ -25,13 +25,47 @@ class CatalogController extends Controller
      */
     public function indexAction()
     {
+        return $this->render('catalog_index.html.twig');
+    }
+    /**
+     * @Route("/ajax/product", name="products_ajax")
+     * @Method("GET")
+     */
+    public function productAjaxAction(Request $request)
+    {
         $em = $this->getDoctrine()->getManager();
-        $categories = $em->getRepository("AppBundle:Category")->findBy(array('parent' => null));
-        $products = $em->getRepository('AppBundle:Product')->findAll();
-        return $this->render('catalog_index.html.twig', array(
-            'categories' => $categories,
-            'products' => $products,
-        ));
+        $page=$request->get('page');
+        $perpage=$request->get('perpage');
+        $count=0;
+        $products=array();
+        if ($request->get('category')) {
+            $requestCategory = $em->getRepository("AppBundle:Category")->find($request->get('category'));
+            $collection = new ArrayCollection(array($requestCategory));
+            $category_iterator = new RecursiveCategoryIterator($collection);
+            $recursive_iterator = new \RecursiveIteratorIterator($category_iterator, \RecursiveIteratorIterator::SELF_FIRST);
+            foreach ($recursive_iterator as $index => $child_category) {
+                $products=array_merge($products, $em->getRepository("AppBundle:Product")
+                    ->findBy(array('category'=>$child_category->getId(),'isActive'=>true)));
+            }
+
+        } else {
+            $products=$em->getRepository("AppBundle:Product")->findBy(array('isActive'=>true));
+        }
+
+        $responseProducts = array();
+        if (isset($products)!=0) {
+            $count=count($products);
+            $products=array_slice($products,($page-1)*$perpage,$perpage);   
+            foreach ($products as $product) {
+                $responseProducts[] = array(
+                    'id' => $product->getId(),
+                    'name' => $product->getName(),
+                    'image' => $product->getImage(),
+                );
+            }
+        }
+
+        return new JsonResponse(array('products'=>$responseProducts,'count'=>$count));
     }
     /**
      * @Route("/ajax/category/{id}", name="category_ajax")
@@ -40,40 +74,26 @@ class CatalogController extends Controller
     public function categoryAjaxAction($id)
     {
         $em = $this->getDoctrine()->getManager();
-        $requestCategory = $em->getRepository("AppBundle:Category")->find($id);
-        $categories=$requestCategory->getChildren();
-
-
+        if ($id == 'null') {
+            $categories = $em->getRepository("AppBundle:Category")->findBy(array('parent'=>null));
+        }
+        else {
+            $requestCategory = $em->getRepository("AppBundle:Category")->find($id);
+            $categories=$requestCategory->getChildren();
+        }
 
         $responseCategories=array();
 
         foreach ($categories as $category) {
+            $children=$em->getRepository("AppBundle:Category")->findBy(array('parent'=>$category->getId()));
             $responseCategories[]=array(
-              'id'=>$category->getId(),
-              'title'=>$category->getTitle(),
+                'id'=>$category->getId(),
+                'title'=>$category->getTitle(),
+                'children'=>($children != null),
             );
         }
-        $em=$em->getRepository("AppBundle:Product");
-        $responseProducts=array();
-        $collection = new ArrayCollection(array($requestCategory));
-        $category_iterator = new RecursiveCategoryIterator($collection);
-        $recursive_iterator = new \RecursiveIteratorIterator($category_iterator, \RecursiveIteratorIterator::SELF_FIRST);
-        foreach ($recursive_iterator as $index => $child_category)
-        {
-            $products=$em->findBy(array('category'=>$child_category->getId()));
-            foreach ($products as $product){
-                $responseProducts[]=array(
-                    'id'=>$product->getId(),
-                    'name'=>$product->getName(),
-                    'description'=>$product->getDescription(),
-                    'dateOfCreation'=>$product->getDateOfCreation(),
-                    'dateOfLastUpdate'=>$product->getDateOfLastUpdate(),
-                    'SKU'=>$product->getUniqueIdentifier(),
-                    'image'=>$product->getImage(),
-                );
-            }
-        }
-        return new JsonResponse(array('categories' => $responseCategories,
-            'products'=>$responseProducts));
+
+        return new JsonResponse($responseCategories);
     }
+
 }

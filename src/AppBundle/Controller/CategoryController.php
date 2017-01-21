@@ -31,10 +31,9 @@ class CategoryController extends Controller
         $category_iterator = new RecursiveCategoryIterator($collection);
         $recursive_iterator = new \RecursiveIteratorIterator($category_iterator, \RecursiveIteratorIterator::SELF_FIRST);
         $categories = $em->getRepository('AppBundle:Category')->findAll();
-        dump($recursive_iterator);
+
         return $this->render('category/index.html.twig', array(
             'categories' => $categories,
-            'iterator' => $recursive_iterator,
         ));
     }
 

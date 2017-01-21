@@ -1,23 +1,24 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="UTF-8" />
-        <title>{% block title %}Welcome!{% endblock %}</title>
-        <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
+<head>
+    <meta charset="UTF-8" />
+    <title>{% block title %}Welcome!{% endblock %}</title>
+    <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
+    <link href="https://fonts.googleapis.com/css?family=Jura:300,400,500&amp;subset=cyrillic-ext" rel="stylesheet">
 
 
-        <link rel="stylesheet"
-              href="{{ asset('assets/vendor/bootstrap/dist/css/bootstrap.min.css') }}">
-        <link rel="stylesheet"
-              href="{{ asset('assets/vendor/bootstrap/dist/css/bootstrap-theme.min.css') }}">
-        {% block stylesheets %}{% endblock %}
+    <link rel="stylesheet"
+          href="{{ asset('assets/vendor/bootstrap/dist/css/bootstrap.min.css') }}">
+    <link rel="stylesheet"
+          href="{{ asset('assets/vendor/bootstrap/dist/css/bootstrap-theme.min.css') }}">
+    {% block stylesheets %}{% endblock %}
+    {% block javascripts %}
+        <script src="{{ asset('assets/vendor/jquery/dist/jquery.min.js') }}"></script>
+        <script src="{{ asset('assets/vendor/bootstrap/dist/js/bootstrap.min.js') }}"></script>
+    {% endblock %}
+</head>
+<body>
+{% block body %}{% endblock %}
 
-    </head>
-    <body>
-        {% block body %}{% endblock %}
-        {% block javascripts %}
-            <script src="{{ asset('assets/vendor/bootstrap/dist/js/bootstrap.min.js') }}"></script>
-            <script src="{{ asset('assets/vendor/jquery/dist/jquery.min.js') }}"></script>
-        {% endblock %}
-    </body>
+</body>
 </html>
