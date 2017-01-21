@@ -173,7 +173,7 @@
 
     </div>
 
-    <div id="pagination-wrapper">
+    <div id="pagination-wrapper" class="zui-pager col-md-12 col-xs-12 col-sm-12 col-lg-12 text-center">
 
     </div>
 
@@ -198,9 +198,11 @@
 
             var paginationButtons = 3;
             var paginatorElementsOnPage = options.rowsPerPage;
+            var editUrl = options.editUrl;
             var paginationButtonsCount;
 
-
+            rootElement.appendChild(createGridTable());
+            getProductsAjax();
 
             function checkForEmpty(count) {
                 if (count) {
@@ -228,7 +230,7 @@
                 }
             }
 
-            rootElement.appendChild(createGridTable());
+
             paginationWrapper.onclick = function (event) {
                 delegatePaginationClick(event);
             }
@@ -251,7 +253,6 @@
 
                         for (var j = 0; j < options.filterableColumns.length; j++) {
                             if (options.sortableColumns[i] == options.filterableColumns[j]) {
-                                console.log('yep');
                                 var input = document.createElement('input');
                                 input.setAttribute('type', 'text');
                                 input.setAttribute('class', 'form-control');
@@ -265,6 +266,11 @@
 
 
                 }
+                var tableHeader = document.createElement('th');
+                tableHeader.classList.add('table-header');
+                tableHeader.innerHTML = 'Edit';
+                tableRow.appendChild(tableHeader);
+
                 tableHead.appendChild(tableRow);
                 return tableHead;
             }
@@ -276,10 +282,17 @@
                 for (var i = 0; i < options.sortableColumns.length; i++) {
                     var tableItem = document.createElement('td');
                     var caption = (options.sortableColumns[i]).toString();
-                    tableItem.innerHTML = element.caption;
+                    console.log(element);
+                    tableItem.innerHTML = element[caption];
                     tableItem.setAttribute('caption', caption);
                     tableRow.appendChild(tableItem);
                 }
+                var tableItem = document.createElement('td');
+                var editLink = document.createElement('a');
+                editLink.setAttribute('href', editUrl+element.id+"/edit");
+                editLink.innerHTML = 'Edit';
+                tableItem.appendChild(editLink);
+                tableRow.appendChild(tableItem);
 
                 return tableRow;
             }
@@ -408,7 +421,6 @@
             function getProductsAjax() {
                 deleteChilds(tableBody);
                 $.getJSON(ajaxProductLink, {
-                    category: activeCategory,
                     page: activePaginatorNumber,
                     perpage: paginatorElementsOnPage
                 }, function(JSON_Data) {
@@ -432,11 +444,12 @@
 
 
         $("#entities-grid").ajaxgrid({
-            dataUrl: "http://localhost/product",
-            sortableColumns: ["id", "Name", "Description", "Dateofcreation",
-                "Dateoflastupdate", "Isactive", "Uniqueidentifier"],
-            filterableColumns: ["id", "Name", "Description", "Dateofcreation",
-                "Dateoflastupdate", "Isactive", "Uniqueidentifier"],
+            dataUrl: "http://127.0.0.1:8000/product/ajax",
+            editUrl: "http://127.0.0.1:8000/product/",
+            sortableColumns: ["id", "name", "description", "dateOfCreation",
+                "dateOfLastUpdate", "isActive", "SKU"],
+            filterableColumns: ["id", "name", "description", "dateOfCreation",
+                "dateOfLastUpdate", "isActive", "SKU"],
             rowsPerPage: 5
         });
     </script>
