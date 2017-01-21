@@ -34,23 +34,29 @@ class CatalogController extends Controller
     public function productAjaxAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
+        $page=$request->get('page');
+        $perpage=$request->get('perpage');
+        $count=0;
+        $products=array();
         if ($request->get('category')) {
             $requestCategory = $em->getRepository("AppBundle:Category")->find($request->get('category'));
             $collection = new ArrayCollection(array($requestCategory));
             $category_iterator = new RecursiveCategoryIterator($collection);
             $recursive_iterator = new \RecursiveIteratorIterator($category_iterator, \RecursiveIteratorIterator::SELF_FIRST);
             foreach ($recursive_iterator as $index => $child_category) {
-                $products = $child_category->getProducts();
-
+                $products=array_merge($products, $em->getRepository("AppBundle:Product")
+                    ->findBy(array('category'=>$child_category->getId(),'isActive'=>true)));
             }
-        } else {
-            $products=$em->getRepository("AppBundle:Product")->findAll();
 
+        } else {
+            $products=$em->getRepository("AppBundle:Product")->findBy(array('isActive'=>true));
         }
 
         $responseProducts = array();
-        foreach ($products as $product) {
-            if ($product->getIsActive()) {
+        if (isset($products)!=0) {
+            $count=count($products);
+            $products=array_slice($products,($page-1)*$perpage,$perpage);
+            foreach ($products as $product) {
                 $responseProducts[] = array(
                     'id' => $product->getId(),
                     'name' => $product->getName(),
@@ -58,7 +64,8 @@ class CatalogController extends Controller
                 );
             }
         }
-        return new JsonResponse($responseProducts);
+
+        return new JsonResponse(array('products'=>$responseProducts,'count'=>$count));
     }
     /**
      * @Route("/ajax/category/{id}", name="category_ajax")
