@@ -218,6 +218,7 @@
             var pattern;
 
             rootElement.appendChild(createGridTable());
+            declareInputKeyDown();
             getProductsAjax();
 
             function checkForEmpty(count) {
@@ -275,7 +276,8 @@
                             if (options.sortableColumns[i] == options.filterableColumns[j]) {
                                 var input = document.createElement('input');
                                 input.setAttribute('type', 'text');
-                                input.setAttribute('class', 'form-control');
+                                input.setAttribute('class', 'form-control filter-input');
+                                input.setAttribute('field', options.sortableColumns[i]);
                                 tableHeader.appendChild(input);
                             }
                         }
@@ -444,7 +446,9 @@
                     page: activePaginatorNumber,
                     perpage: paginatorElementsOnPage,
                     sortbyfield: activeRowField,
-                    order: sortOrder
+                    order: sortOrder,
+                    filterbyfield: filterbyfield,
+                    pattern: pattern
                 }, function(JSON_Data) {
                     var products = JSON_Data.products;
                     elementsInDatabase = JSON_Data.count;
@@ -465,7 +469,7 @@
                     activeRow.removeAttribute('order');
                 }
                 activeRow = node;
-                activeRow.classList.add('class', 'active-row');
+                activeRow.classList.add('active-row');
                 activeRowField = activeRow.getAttribute('field');
                 sortOrder = activeRow.getAttribute('order');
             }
@@ -477,7 +481,8 @@
                 if (target.tagName === 'INPUT' || target.tagName === "THEAD") {
                     return;
                 } else if (target.tagName === 'TH' && (target.getAttribute('inactive') != 'false')) {
-
+                    filterbyfield = '';
+                    pattern = '';
                     if (target.getAttribute('order') === 'ASC') {
                         target.setAttribute('order', 'DESC');
                     } else {
@@ -488,7 +493,41 @@
                 }
             }
 
+            function onInputKeyDown(event) {
+                console.log(event.keyCode);
+                if (event.keyCode === 13) {
+                    if (event.target.value) {
+                        if (activeRow) {
+                            activeRow.classList.remove('active-row');
+                            activeRow.removeAttribute('order');
+                        }
+                        activeRowField = '';
+                        sortOrder = '';
+                        filterbyfield = event.target.getAttribute('field');
+                        pattern = event.target.value;
+                        getProductsAjax();
+                    }
+                } else if (event.keyCode === 8 || event.keyCode === 46) {
+                    console.log(event.target.value);
+                    if (!event.target.value) {
+                        activeRowField = '';
+                        sortOrder = '';
+                        filterbyfield = '';
+                        pattern = ''
+                        getProductsAjax();
+                    }
+                }
+            }
 
+            function declareInputKeyDown() {
+                var inputs = document.getElementsByClassName('filter-input');
+                for (var i = 0; i < inputs.length; i++) {
+                    inputs[i].onkeyup = function (event) {
+                        onInputKeyDown(event);
+                    }
+                }
+
+            }
 
         }
 

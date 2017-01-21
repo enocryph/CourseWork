@@ -55,8 +55,8 @@ class ProductController extends Controller
                 ->getQuery()->getResult();
         } elseif ($request->get('filterbyfield')){
             $products = $repository->createQueryBuilder('p')
-                ->where('p.'.$request->get('filterbyfield').' = :pattern')
-                ->setParameter('pattern', $request->get('pattern'))
+                ->where('p.'.$request->get('filterbyfield').' LIKE :pattern')
+                ->setParameter('pattern', $request->get('pattern').'%')
                 ->getQuery()->getResult();
         } else {
             $products = $repository->findAll();
