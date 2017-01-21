@@ -535,7 +535,15 @@
                 if (target.tagName === 'LI' || target.tagName === "DIV") {
                     return;
                 } else if (target.tagName === 'I') {
-                    
+
+                    if (target.getAttribute('control') === 'left') {
+                        activePaginatorNumber -= 1;
+                        getProductsAjax();
+                    } else if (target.getAttribute('control') === 'right') {
+                        activePaginatorNumber += 1;
+                        getProductsAjax();
+                    }
+
                 } else if (target.tagName === 'BUTTON') {
                     highlightPaginator(target);
                     getProductsAjax();
