@@ -46,4 +46,104 @@
             <a href="{{ path('product_new') }}">Create a new product</a>
         </li>
     </ul>
+
+    <div id="entities-grid">
+
+    </div>
+
+    <script>
+
+        $.fn.ajaxgrid = function(options) {
+            var rootElement = this[0];
+            var table;
+            var tableBody;
+
+
+            checkOptions(options);
+
+            function checkOptions(options) {
+                if (!options.dataUrl) {
+                    throw 'Wrong "dataUrl" exception';
+                }
+                if (!options.sortableColumns) {
+                    options.sortableColumns = [];
+                }
+                if (!options.filterableColumns) {
+                    options.filterableColumns = [];
+                }
+                if (!options.rowsPerPage) {
+                    options.rowsPerPage = 5;
+                }
+            }
+
+            rootElement.appendChild(createGridTable());
+
+
+            function createGridTable() {
+                table = document.createElement('table');
+                table.classList.add('table');
+                var tableHeader = createTableHeader();
+                console.log(tableHeader);
+                table.appendChild(tableHeader);
+                return table;
+            }
+
+            function createTableHeader() {
+                var tableHead = document.createElement('thead');
+                var tableRow = document.createElement('tr');
+                    for (var i = 0; i < options.sortableColumns.length; i++) {
+                        var tableHeader = document.createElement('th');
+
+                        for (var j = 0; j < options.filterableColumns.length; j++) {
+                            if (options.sortableColumns[i] == options.filterableColumns[j]) {
+                                console.log('yep');
+                                var input = document.createElement('input');
+                                input.setAttribute('type', 'text');
+                                input.setAttribute('class', 'form-control');
+                                tableHeader.appendChild(input);
+                            }
+                        }
+
+
+                        tableHeader.innerHTML += options.sortableColumns[i];
+                        tableRow.appendChild(tableHeader);
+
+
+                }
+                tableHead.appendChild(tableRow);
+                return tableHead;
+            }
+
+            function createTableRow(element) {
+
+                var tableRow = document.createElement('tr');
+
+                for (var i = 0; i < options.sortableColumns.length; i++) {
+                    var tableItem = document.createElement('td');
+                    var caption = (options.sortableColumns[i]).toString();
+                    tableItem.innerHTML = element.caption;
+                    tableItem.setAttribute('caption', caption);
+                    tableRow.appendChild(tableItem);
+                }
+
+                return tableRow;
+            }
+        }
+
+    </script>
+
+    <script>
+
+
+        $("#entities-grid").ajaxgrid({
+            dataUrl: "http://localhost/product",
+            sortableColumns: ["id", "Name", "Description", "Dateofcreation",
+                "Dateoflastupdate", "Isactive", "Uniqueidentifier"],
+            filterableColumns: ["id", "Name", "Description", "Dateofcreation",
+                "Dateoflastupdate", "Isactive", "Uniqueidentifier"],
+            rowsPerPage: 5
+        });
+    </script>
+
+
 {% endblock %}
