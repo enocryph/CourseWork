@@ -282,35 +282,6 @@
     <div id="pagination" class="col-md-10 col-xs-12 col-sm-8 col-lg-10 col-md-offset-2
     col-sm-offset-4 col-lg-offset-2">
         <div id="pagination-wrapper" class="zui-pager col-md-12 col-xs-12 col-sm-12 col-lg-12 text-center">
-            <ol class="btn-group">
-                <li class="btn-group__item">
-                    <i class="i-chevron-left"></i>
-                </li>
-                <li class="btn-group__item">
-                    <button class="btn btn--basic current">1</button>
-                </li>
-                <li class="btn-group__item">
-                    <button class="btn btn--basic"><span>2</span></button>
-                </li>
-                <li class="btn-group__item">
-                    <button class="btn btn--basic"><span>3</span></button>
-                </li>
-                <li class="btn-group__item">
-                    <button class="btn btn--basic"><span>4</span></button>
-                </li>
-                <li class="btn-group__item">
-                    <button class="btn btn--basic"><span>5</span></button>
-                </li>
-                <li class="btn-group__item">
-                    <button class="btn btn--basic" disabled="disabled">...</button>
-                </li>
-                <li class="btn-group__item">
-                    <button class="btn btn--basic"><span>40</span></button>
-                </li>
-                <li class="btn-group__item">
-                    <i class="i-chevron-right"></i>
-                </li>
-            </ol>
         </div>
     </div>
 
@@ -336,10 +307,13 @@
             var paginationUlCSS = 'btn-group';
             var paginationLiCSS = 'btn-group__item'
             var activeLi; //variable for delegation
-            var activeCategory;
+            var activeCategory ='';
             var activePaginator;
-            var activePaginatorNumber;
+            var activePaginatorNumber = 1;
+            var elementsInDatabase;
 
+            var paginationButtons = 1;
+            var paginatorElementsOnPage = 2;
 
 
             rootElement.onclick = function (event) {
@@ -348,7 +322,7 @@
 
             //initial requests
             buildCategoryTree(null, rootElement);
-            getProductsAjax('');
+            getProductsAjax();
 
             function generateSplitter(level) {
                 var splitter = '&nbsp;&nbsp;';
@@ -390,16 +364,27 @@
 
                 return container;
             }
-            function getProductsAjax(categoryId) {
+
+            function getProductsAjax() {
                 deleteChilds(productsGrid);
+                console.log(activeCategory);
+                console.log(activePaginatorNumber);
+                console.log(paginatorElementsOnPage);
                 $.getJSON(ajaxProductLink, {
-                    category: categoryId
+                    category: activeCategory,
+                    page: activePaginatorNumber,
+                    perpage: paginatorElementsOnPage
                 }, function(JSON_Data) {
-                    $.each(JSON_Data, function(index, element) {
+                    var products = JSON_Data.products;
+                    elementsInDatabase = JSON_Data.count;
+                    createPaginationView(paginatorElementsOnPage, elementsInDatabase,
+                        paginationButtons, activePaginatorNumber, activePaginatorNumber);
+                    $.each(products, function(index, element) {
                         var product = createProductView(element);
                         productsGrid.appendChild(product);
                     });
                 });
+
             }
             function deleteChilds(element) {
                 while (element.firstChild) {
@@ -495,7 +480,7 @@
                     activeLi.classList.add('tree-item-active');
                     activeCategory = activeLi.getAttribute('category_id');
                     //ajax request here!
-                    getProductsAjax(activeCategory);
+                    getProductsAjax();
 
                 }
             }
@@ -537,7 +522,6 @@
             }
 
             function highlightPaginator(node) {
-                console.log(node);
                 if (activePaginator) {
                     activePaginator.classList.remove('current');
                 }
@@ -551,18 +535,15 @@
                 if (target.tagName === 'LI' || target.tagName === "DIV") {
                     return;
                 } else if (target.tagName === 'I') {
-
+                    
                 } else if (target.tagName === 'BUTTON') {
                     highlightPaginator(target);
-                    createPaginationView(1,10,2,3, activePaginatorNumber);
-                    console.log(activePaginatorNumber);
+                    getProductsAjax();
                 }
 
 
 
             }
-
-            createPaginationView(10,20,2,3,2);
 
             paginationWrapper.onclick = function (event) {
                 delegatePaginationClick(event);
@@ -571,7 +552,6 @@
             function createPaginationView(elementsOnPage, allElements, paginationButtonsOnPage, startElement,
                                           activeElement) {
                 deleteChilds(paginationWrapper);
-                console.log(activeElement);
                 var paginationList = document.createElement('ol');
                 paginationList.setAttribute('class', paginationUlCSS);
                 if (allElements <= elementsOnPage) {
