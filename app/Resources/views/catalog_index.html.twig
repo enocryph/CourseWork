@@ -269,6 +269,12 @@
             transition: .6s;
         }
 
+        #pagination {
+            position: fixed;
+            bottom: 0;
+            background: #ebebeb;
+        }
+
 
     </style>
 {% endblock %}
@@ -313,7 +319,7 @@
             var elementsInDatabase;
 
             var paginationButtons = 2;
-            var paginatorElementsOnPage = 3;
+            var paginatorElementsOnPage = 6;
             var paginationButtonsCount;
 
             rootElement.onclick = function (event) {
