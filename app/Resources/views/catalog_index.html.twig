@@ -124,7 +124,7 @@
             font-weight: 300;
             background-color: transparent;
             box-shadow: inset 0px -2px 0px 0px #bbb;
-            color: #bbb;
+            color: #000;
             outline: none;
         }
         .zui-pager .btn-group__item .btn:hover {
@@ -141,7 +141,7 @@
         }
         .zui-pager .btn[disabled] {
             box-shadow: inset 0px -2px 0px 0px #e6e6e6;
-            color: #e6e6e6;
+            color: #1d1d1d;
         }
         .zui-pager .btn[disabled]:hover {
             box-shadow: inset 0px -2px 0px 0px #e6e6e6;
@@ -272,6 +272,7 @@
 
     </style>
 {% endblock %}
+{% block title %}Catalog{% endblock %}
 {% block body %}
     <div id="category-tree" class="col-md-2 col-xs-12 col-lg-2 col-sm-4"></div>
     <div id="products-grid" class="col-md-10 col-xs-12 col-sm-8 col-lg-10 col-md-offset-2
@@ -280,16 +281,13 @@
     </div>
     <div id="pagination" class="col-md-10 col-xs-12 col-sm-8 col-lg-10 col-md-offset-2
     col-sm-offset-4 col-lg-offset-2">
-        <div class="zui-pager col-md-12 col-xs-12 col-sm-12 col-lg-12 text-center">
+        <div id="pagination-wrapper" class="zui-pager col-md-12 col-xs-12 col-sm-12 col-lg-12 text-center">
             <ol class="btn-group">
                 <li class="btn-group__item">
                     <i class="i-chevron-left"></i>
                 </li>
                 <li class="btn-group__item">
                     <button class="btn btn--basic current">1</button>
-                </li>
-                <li class="btn-group__item">
-                    <button class="btn btn--basic" disabled="disabled" style="display: none;">...</button>
                 </li>
                 <li class="btn-group__item">
                     <button class="btn btn--basic"><span>2</span></button>
@@ -333,7 +331,16 @@
             var ajaxProductLink = 'ajax/product';
             var ajaxCategoryLink = 'ajax/category/';
 
+
+            var paginationWrapper = document.getElementById('pagination-wrapper');
+            var paginationUlCSS = 'btn-group';
+            var paginationLiCSS = 'btn-group__item'
             var activeLi; //variable for delegation
+            var activeCategory;
+            var activePaginator;
+            var activePaginatorNumber;
+
+
 
             rootElement.onclick = function (event) {
                 delegateClick(event);
@@ -486,10 +493,147 @@
                     }
                     activeLi = node;
                     activeLi.classList.add('tree-item-active');
+                    activeCategory = activeLi.getAttribute('category_id');
                     //ajax request here!
-                    getProductsAjax(activeLi.getAttribute('category_id'));
+                    getProductsAjax(activeCategory);
 
                 }
+            }
+
+            function createPaginationLi(number, active) {
+                var li = document.createElement('li');
+                li.setAttribute('class', paginationLiCSS);
+                var button = document.createElement('button');
+                button.setAttribute('class', 'btn btn--basic');
+                button.innerHTML = number;
+                if (active === 'true') {
+                    button.setAttribute('class', 'btn btn--basic current');
+                }
+                li.appendChild(button);
+
+                return li;
+            }
+            function createPaginationControl(type) {
+                var li = document.createElement('li');
+                li.setAttribute('class', paginationLiCSS);
+                var i = document.createElement('i');
+                i.setAttribute('class', 'i-chevron-'+type);
+                i.setAttribute('control', type);
+                li.appendChild(i);
+
+                return li;
+            }
+            function createPaginationSplitter() {
+                var li = document.createElement('li');
+                li.setAttribute('class', paginationLiCSS);
+                li.setAttribute('splitter', 'true');
+                var button = document.createElement('button');
+                button.setAttribute('class', 'btn btn--basic');
+                button.setAttribute('disabled', 'disabled');
+                button.innerHTML = '...';
+                li.appendChild(button);
+
+                return li;
+            }
+
+            function highlightPaginator(node) {
+                console.log(node);
+                if (activePaginator) {
+                    activePaginator.classList.remove('current');
+                }
+                activePaginator = node;
+                activePaginator.classList.add('class', 'current');
+                activePaginatorNumber = parseInt(activePaginator.innerHTML);
+            }
+            function delegatePaginationClick(event) {
+                var target = event.target;
+
+                if (target.tagName === 'LI' || target.tagName === "DIV") {
+                    return;
+                } else if (target.tagName === 'I') {
+
+                } else if (target.tagName === 'BUTTON') {
+                    highlightPaginator(target);
+                    createPaginationView(1,10,2,3, activePaginatorNumber);
+                    console.log(activePaginatorNumber);
+                }
+
+
+
+            }
+
+            createPaginationView(10,20,2,3,2);
+
+            paginationWrapper.onclick = function (event) {
+                delegatePaginationClick(event);
+            }
+
+            function createPaginationView(elementsOnPage, allElements, paginationButtonsOnPage, startElement,
+                                          activeElement) {
+                deleteChilds(paginationWrapper);
+                console.log(activeElement);
+                var paginationList = document.createElement('ol');
+                paginationList.setAttribute('class', paginationUlCSS);
+                if (allElements <= elementsOnPage) {
+                    return;
+                }
+
+                var paginationButtonsCount = Math.ceil(allElements / elementsOnPage);
+
+                if (paginationButtonsCount <= paginationButtonsOnPage) {
+
+                    for (var i = 1; i <= paginationButtonsCount; i++) {
+
+                        var li;
+                        if (i === activeElement) {
+                           li = createPaginationLi(i, 'true');
+                        } else {
+                           li = createPaginationLi(i);
+                        }
+                        paginationList.appendChild(li);
+
+                    }
+
+                } else if (paginationButtonsCount > paginationButtonsOnPage) {
+                    var leftControl = createPaginationControl('left');
+                    var rightControl = createPaginationControl('right');
+                    paginationList.appendChild(leftControl);
+
+                    if (startElement != 1) {
+                        paginationList.appendChild(createPaginationLi(1));
+                        if (startElement > 2) {
+                            paginationList.appendChild(createPaginationSplitter());
+                        }
+                    }
+
+                    for (var i = 0; i < paginationButtonsOnPage; i++) {
+
+                        var li;
+                        if (i + startElement === activeElement) {
+                            li = createPaginationLi(i + startElement, 'true');
+                        } else {
+                            li = createPaginationLi(i + startElement);
+                        }
+                        paginationList.appendChild(li);
+
+                    }
+
+                    if (startElement + paginationButtonsOnPage <= paginationButtonsCount) {
+                        if (!(startElement + paginationButtonsOnPage == paginationButtonsCount)) {
+                            paginationList.appendChild(createPaginationSplitter());
+                        }
+
+
+                        paginationList.appendChild(createPaginationLi(paginationButtonsCount));
+                    }
+
+                    paginationList.appendChild(rightControl);
+                }
+
+
+
+                paginationWrapper.appendChild(paginationList);
+
             }
 
         }
