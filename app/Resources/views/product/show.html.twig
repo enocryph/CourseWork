@@ -48,9 +48,9 @@
     <div class="clearfix">
         <div class="btn-group">
             <a class="btn btn-default" href="/product/">Back to the list</a>
-            <a class="btn btn-default" href="/product/1/edit">Edit</a>
+            <a class="btn btn-default" href="/product/{{ product.id }}/edit">Edit</a>
         </div>
-        <form name="form" method="post" action="/product/1"><input type="hidden" name="_method" value="DELETE" />
+        <form name="form" method="post" action="/product/{{ product.id }}"><input type="hidden" name="_method" value="DELETE" />
             <input class="btn btn-danger" type="submit" value="Delete">
             <input type="hidden" id="form__token" name="form[_token]" value="CLhT8zpWQIzY4056xgAADox0pUOTYQ4goGzsuKo9658" /></form>
     </div>
