@@ -25,13 +25,7 @@ class CatalogController extends Controller
      */
     public function indexAction()
     {
-        $em = $this->getDoctrine()->getManager();
-        $categories = $em->getRepository("AppBundle:Category")->findBy(array('parent' => null));
-        $products = $em->getRepository('AppBundle:Product')->findAll();
-        return $this->render('catalog_index.html.twig', array(
-            'categories' => $categories,
-            'products' => $products,
-        ));
+        return $this->render('catalog_index.html.twig');
     }
     /**
      * @Route("/ajax/product", name="products_ajax")
@@ -39,27 +33,31 @@ class CatalogController extends Controller
      */
     public function productAjaxAction(Request $request)
     {
-        $categoryId=$request->get('category');
         $em = $this->getDoctrine()->getManager();
-        $requestCategory = $em->getRepository("AppBundle:Category")->find($categoryId);
+        if ($request->get('category')) {
+            $requestCategory = $em->getRepository("AppBundle:Category")->find($request->get('category'));
+            $collection = new ArrayCollection(array($requestCategory));
+            $category_iterator = new RecursiveCategoryIterator($collection);
+            $recursive_iterator = new \RecursiveIteratorIterator($category_iterator, \RecursiveIteratorIterator::SELF_FIRST);
+            foreach ($recursive_iterator as $index => $child_category) {
+                $products = $child_category->getProducts();
 
-        $em=$em->getRepository("AppBundle:Product");
-        $responseProducts=array();
-        $collection = new ArrayCollection(array($requestCategory));
-        $category_iterator = new RecursiveCategoryIterator($collection);
-        $recursive_iterator = new \RecursiveIteratorIterator($category_iterator, \RecursiveIteratorIterator::SELF_FIRST);
-        foreach ($recursive_iterator as $index => $child_category)
-        {
-            $products=$em->findBy(array('category'=>$child_category->getId()));
-            foreach ($products as $product){
-                $responseProducts[]=array(
-                    'id'=>$product->getId(),
-                    'name'=>$product->getName(),
-                    'image'=>$product->getImage(),
+            }
+        } else {
+            $products=$em->getRepository("AppBundle:Product")->findAll();
+
+        }
+
+        $responseProducts = array();
+        foreach ($products as $product) {
+            if ($product->getIsActive()) {
+                $responseProducts[] = array(
+                    'id' => $product->getId(),
+                    'name' => $product->getName(),
+                    'image' => $product->getImage(),
                 );
             }
         }
-
         return new JsonResponse($responseProducts);
     }
     /**
