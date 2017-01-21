@@ -28,10 +28,18 @@ class CatalogController extends Controller
         return $this->render('catalog_index.html.twig');
     }
     /**
-     * @Route("/ajax/product", name="products_ajax")
+     * @Route("/product/{id}", name="product_view")
      * @Method("GET")
      */
-    public function productAjaxAction(Request $request)
+    public function productAction(Product $product)
+    {
+        return $this->render('catalog_product.html.twig',array('product' => $product));
+    }
+    /**
+     * @Route("/ajax/products", name="products_ajax")
+     * @Method("GET")
+     */
+    public function productsAjaxAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
         $page=$request->get('page');
