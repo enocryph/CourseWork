@@ -47,23 +47,29 @@ class CatalogController extends Controller
         $count=0;
         $products=array();
         if ($request->get('category')) {
-            $requestCategory = $em->getRepository("AppBundle:Category")->find($request->get('category'));
-            $collection = new ArrayCollection(array($requestCategory));
+            $repository=$em->getRepository('AppBundle:Category');
+            $rootCategory=$repository->find($request->get('category'));
+            $collection = new ArrayCollection(array($rootCategory));
             $category_iterator = new RecursiveCategoryIterator($collection);
             $recursive_iterator = new \RecursiveIteratorIterator($category_iterator, \RecursiveIteratorIterator::SELF_FIRST);
+            $categories=array();
             foreach ($recursive_iterator as $index => $child_category) {
-                $products=array_merge($products, $em->getRepository("AppBundle:Product")
-                    ->findBy(array('category'=>$child_category->getId(),'isActive'=>true)));
+                $categories[]=$child_category->getId();
             }
-
+            $repository=$em->getRepository('AppBundle:Product');
+            $products = $repository->createQueryBuilder('p')
+                ->where('p.isActive = :true')->andWhere('p.category IN (:categories)')
+                ->setParameter('true', true)->setParameter('categories', array_values($categories))
+                ->getQuery()->getResult();
         } else {
-            $products=$em->getRepository("AppBundle:Product")->findBy(array('isActive'=>true));
+            $repository=$em->getRepository('AppBundle:Product');
+            $products = $repository->findBy(array('isActive'=>true));
         }
 
         $responseProducts = array();
         if (isset($products)!=0) {
             $count=count($products);
-            $products=array_slice($products,($page-1)*$perpage,$perpage);   
+            $products=array_slice($products,($page-1)*$perpage,$perpage);
             foreach ($products as $product) {
                 $responseProducts[] = array(
                     'id' => $product->getId(),
@@ -83,7 +89,7 @@ class CatalogController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         if ($id == 'null') {
-            $categories = $em->getRepository("AppBundle:Category")->findBy(array('parent'=>null));
+            $categories = $em->getRepository("AppBundle:Category")->findBy(array('parent'=>null,'isActive'=>true));
         }
         else {
             $requestCategory = $em->getRepository("AppBundle:Category")->find($id);
