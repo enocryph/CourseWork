@@ -10,6 +10,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Validator\Constraints\DateTime;
 use AppBundle\Form\ProductType;
 use AppBundle\Service\ImageDownloader;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
  * Product controller.
@@ -34,7 +35,47 @@ class ProductController extends Controller
             'products' => $products,
         ));
     }
+    /**
+     * Lists all product entities.
+     *
+     * @Route("/ajax", name="product_ajax")
+     * @Method("GET")
+     */
+    public function ajaxAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $repository=$em->getRepository('AppBundle:Product');
+        $page=$request->get('page');
+        $perpage=$request->get('perpage');
+        $count=0;
+        $products=array();
+        if ($request->get('sortbyfield'))
+        {
+            $products = $repository->createQueryBuilder('p')
+                ->orderBy('p.'.$request->get('sortbyfield'),$request->get('order'))
+                ->getQuery()->getResult();;
+        } else {
+            $products = $repository->findAll();
+        }
+        $responseProducts = array();
+        if (isset($products)!=0) {
+            $count=count($products);
+            $products=array_slice($products,($page-1)*$perpage,$perpage);
+            foreach ($products as $product) {
+                $responseProducts[] = array(
+                    'id'=>$product->getId(),
+                    'name'=>$product->getName(),
+                    'description'=>$product->getDescription(),
+                    'dateOfCreation'=>$product->getDateOfCreation(),
+                    'dateOfLastUpdate'=>$product->getDateOfLastUpdate(),
+                    'SKU'=>$product->getUniqueIdentifier(),
+                    'image'=>$product->getImage(),
+                );
+            }
+        }
 
+        return new JsonResponse(array('products'=>$responseProducts,'count'=>$count));
+    }
     /**
      * Creates a new product entity.
      *
@@ -50,9 +91,6 @@ class ProductController extends Controller
         if ($form->isSubmitted() && $form->isValid()) {
 
             $file = $product->getImage();
-//            $image = new ImageDownloader();
-//            $imagePath = $image->downloadImage($file);
-//            $product->setImage($imagePath);
             $image = $this->get('app.image_downloader');
             $imagePath = $image->downloadImage($file);
             $product->setImage($imagePath);
