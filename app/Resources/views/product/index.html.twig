@@ -505,6 +505,7 @@
                         sortOrder = '';
                         filterbyfield = event.target.getAttribute('field');
                         pattern = event.target.value;
+                        activePaginatorNumber =1;
                         getProductsAjax();
                     }
                 } else if (event.keyCode === 8 || event.keyCode === 46) {
@@ -513,7 +514,8 @@
                         activeRowField = '';
                         sortOrder = '';
                         filterbyfield = '';
-                        pattern = ''
+                        pattern = '';
+                        activePaginatorNumber =1;
                         getProductsAjax();
                     }
                 }
@@ -543,7 +545,7 @@
                 "dateOfLastUpdate", "isActive", "uniqueIdentifier"],
             filterableColumns: ["id", "name", "description", "dateOfCreation",
                 "dateOfLastUpdate", "isActive", "uniqueIdentifier"],
-            rowsPerPage: 5
+            rowsPerPage: 2
         });
     </script>
 
