@@ -22,11 +22,17 @@ class User implements AdvancedUserInterface
 
     /**
      * @ORM\Column(type="string", length=255, unique=true)
+     * @Assert\Email(
+     * message = "The email '{{ value }}' is not a valid email.",
+     * checkMX = true
+     * )
      */
     protected $email;
 
     /**
      * @ORM\Column(type="string", length=40)
+     * @Assert\Length(max=16, min=4, minMessage = "Name can not be shorter than 4 characters.",
+     *     maxMessage = "Name can not be longer than 16 characters.")
      */
     protected $name;
 

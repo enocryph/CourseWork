@@ -63,7 +63,7 @@ class ProductController extends Controller
             } else {
                 $products = $repository->createQueryBuilder('p')
                     ->where('p.' . $request->get('filterbyfield') . ' LIKE :pattern')
-                    ->setParameter('pattern', $request->get('pattern') . '%')
+                    ->setParameter('pattern', '%' .$request->get('pattern') . '%')
                     ->getQuery()->getResult();
             }
         } else {
