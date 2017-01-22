@@ -28,7 +28,7 @@ class CatalogController extends Controller
         if ($request->get('category')){
             $category=$request->get('category');
         } else {
-            $category='';
+            $category= 'null';
         }
         if ($request->get('page')){
             $page=$request->get('page');
