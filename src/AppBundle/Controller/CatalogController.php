@@ -23,9 +23,17 @@ class CatalogController extends Controller
      * @Route("/", name="catalog_index")
      * @Method("GET")
      */
-    public function indexAction()
+    public function indexAction(Request $request)
     {
-        return $this->render('catalog_index.html.twig');
+        $category=$request->get('category');
+        if ($request->get('page')){
+            $page=$request->get('page');
+        } else {
+            $page=1;
+        }
+        dump($category);
+        dump($page);
+        return $this->render('catalog_index.html.twig', array('category'=>$category, 'page'=>$page));
     }
     /**
      * @Route("/product/{id}", name="product_view")
