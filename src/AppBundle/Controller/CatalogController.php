@@ -25,7 +25,11 @@ class CatalogController extends Controller
      */
     public function indexAction(Request $request)
     {
-        $category=$request->get('category');
+        if ($request->get('category')){
+            $category=$request->get('category');
+        } else {
+            $category='';
+        }
         if ($request->get('page')){
             $page=$request->get('page');
         } else {
