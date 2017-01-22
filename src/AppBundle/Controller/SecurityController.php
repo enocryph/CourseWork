@@ -1,6 +1,7 @@
 <?php
 
 namespace AppBundle\Controller;
+use AppBundle\Form\LoginType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
@@ -23,7 +24,7 @@ class SecurityController extends Controller
         $helper = $this->get('security.authentication_utils');
 
         return $this->render(
-            'login.html.twig',
+            'User_login.html.twig',
             array(
                 'last_username' => $helper->getLastUsername(),
                 'error'         => $helper->getLastAuthenticationError(),
@@ -84,7 +85,7 @@ class SecurityController extends Controller
                 ->setFrom('courseworkproductscatalog@gmial.com')
                 ->setTo($user->getEmail())
                 ->setBody(
-                    $this->renderView('email_register.html.twig',
+                    $this->renderView('Email_registerMessage.html.twig',
                         array(
                             'username' => $user->getName(),
                             'email' => $user->getEmail(),
@@ -102,7 +103,7 @@ class SecurityController extends Controller
         }
         $errors = (string) $form->getErrors(true);
         return $this->render(
-            'register.html.twig',
+            'User_registration.html.twig',
             array('form' => $form->createView(),
                 'errors'=>$errors)
         );
@@ -139,7 +140,7 @@ class SecurityController extends Controller
             $em->flush();
             return $this->redirectToRoute('login');
         }
-        return $this->render('reset_password.html.twig', array(
+        return $this->render('User_passwordReset.html.twig', array(
             'token' => $token,
             'resetForm' => $resetForm->createView()
         ));

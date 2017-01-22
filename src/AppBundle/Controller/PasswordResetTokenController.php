@@ -52,10 +52,10 @@ class PasswordResetTokenController extends Controller
 
             $message = \Swift_Message::newInstance(null)
                 ->setSubject('Password reset request')
-                ->setFrom('sashka.k777@gmail.com')
-                ->setTo('sashka.k777@gmail.com')
+                ->setFrom('courseworkproductscatalog@gmial.com')
+                ->setTo($user->getEmail())
                 ->setBody(
-                    $this->renderView('email_password_reset.html.twig',
+                    $this->renderView('Email_passwordReset.html.twig',
                         array(
                             'url' => $this->generateUrl('user_reset_password', array(
                                 'token' => $passwordResetToken->getToken()
@@ -71,7 +71,7 @@ class PasswordResetTokenController extends Controller
             return $this->redirectToRoute('homepage');
         }
 
-        return $this->render('forgot_password.html.twig', array(
+        return $this->render('User_forgottenPassword.html.twig', array(
             'form' => $form->createView()
         ));
     }

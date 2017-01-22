@@ -2,46 +2,42 @@
 {% block title %}Product's Catalog Main Page{% endblock %}
 {% block body %}
 
-    <div class="main-page-wrapper">
-        <div class="vertical-middle">
-            {% for flashMessage in app.session.flashbag.get('success') %}
-                <div class="alert alert-success">
-                    {{ flashMessage }}
-                </div>
-            {% endfor %}
-            <h1 class="project-name">Course Work Product's Catalog</h1>
-            <p class="project-description">Shit Happens</p>
+<div class="main-page-wrapper">
+    <div class="vertical-middle">
+
+        {% for flashMessage in app.session.flashbag.get('success') %}
+            <div class="alert alert-success">
+                {{ flashMessage }}
+            </div>
+        {% endfor %}
+
+        <h1 class="project-name">Course Work Product's Catalog</h1>
+        <p class="project-description">Shit Happens</p>
+
+        {% if app.user %}
+            <p class="user-greetings">Hello,
+                <span class="username">{{ app.user.name }}</span>,
+                start using
+                <a href="{{ path('Catalog_index')}}" class="link-border-animation link-orange">Catalog</a>
+                now!
+            </p>
+        {% else %}
             <a href="{{ path('login')}}" class="btn btn-default btn-150px btn-margin">Login</a>
             <a href="{{ path('registration')}}" class="btn btn-default btn-150px btn-margin">Register</a>
             <p class="password-reset-wrapper">
                 Forgot your password?
                 Click <a href="{{ path('forgotpassword')}}" class="link-border-animation link-orange">here.</a>
             </p>
+        {% endif %}
 
-            <div class="develop">
-                <p class="password-reset-wrapper">
-                    This buttons will be deleted in production
-                </p>
-                <a href="/product" class="btn btn-warning btn-150px btn-margin">Product</a>
-                <a href="/passwordreset" class="btn btn-warning btn-150px btn-margin">Reset</a>
-            </div>
-
-
-            <p class="user-greetings">Hello,
-                <span class="username">Соня Мармеладова</span>,
-                start using
-                <a href="{{ path('catalog_index')}}" class="link-border-animation link-orange">Catalog</a>
-                now!
+        <footer class="footer">
+            <p class="footer-text">
+                Git repository <a href="https://github.com/enocryph/CourseWork"
+                                  class="link-border-animation link-black">here</a>.
             </p>
-            <footer class="footer">
-                <p class="footer-text">
-                    Git repository <a href="https://github.com/enocryph/CourseWork"
-                                      class="link-border-animation link-black">here</a>.
-                </p>
-            </footer>
-        </div>
-
+        </footer>
     </div>
+</div>
 {% endblock %}
 
 {% block stylesheets %}
