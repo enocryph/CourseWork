@@ -25,7 +25,6 @@ class CatalogController extends Controller
      */
     public function indexAction(Request $request)
     {
-        dump($request->get('category'));
         if  (is_int($request->get('category'))) {
 
                 $category = $request->get('category');
