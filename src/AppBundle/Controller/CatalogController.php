@@ -20,7 +20,7 @@ use AppBundle\Entity\RecursiveCategoryIterator;
 class CatalogController extends Controller
 {
     /**
-     * @Route("/", name="catalog_index")
+     * @Route("/", name="Catalog_index")
      * @Method("GET")
      */
     public function indexAction(Request $request)
@@ -38,7 +38,7 @@ class CatalogController extends Controller
         } else {
             $page=1;
         }
-        return $this->render('catalog_index.html.twig', array('category'=>$category, 'page'=>$page));
+        return $this->render('Catalog_index.html.twig', array('category'=>$category, 'page'=>$page));
     }
     /**
      * @Route("/product/{id}", name="product_view")
@@ -46,7 +46,7 @@ class CatalogController extends Controller
      */
     public function productAction(Product $product)
     {
-        return $this->render('catalog_product.html.twig',array('product' => $product));
+        return $this->render('Catalog_product.html.twig',array('product' => $product));
     }
     /**
      * @Route("/ajax/products", name="products_ajax")
