@@ -16,9 +16,6 @@ use Symfony\Component\HttpFoundation\JsonResponse;
  */
 class UserController extends Controller
 {
-
-
-
     /**
      * Lists all user entities.
      *
