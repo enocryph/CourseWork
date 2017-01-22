@@ -53,16 +53,24 @@ class ProductController extends Controller
             $products = $repository->createQueryBuilder('p')
                 ->orderBy('p.'.$request->get('sortbyfield'),$request->get('order'))
                 ->getQuery()->getResult();
-        } elseif ($request->get('filterbyfield')){
-            $products = $repository->createQueryBuilder('p')
-                ->where('p.'.$request->get('filterbyfield').' LIKE :pattern')
-                ->setParameter('pattern', $request->get('pattern').'%')
-                ->getQuery()->getResult();
+        } elseif ($request->get('filterbyfield')) {
+            if (($request->get('filterbyfield') == 'dateOfCreation') || ($request->get('filterbyfield') == 'dateOfLastUpdate')){
+                $date = date_create($request->get('pattern'));
+                $products = $repository->createQueryBuilder('p')
+                    ->where('p.' . $request->get('filterbyfield') . ' >= :pattern')
+                    ->setParameter('pattern', date_format($date, 'Y-m-d H:i:s'))
+                    ->getQuery()->getResult();
+            } else {
+                $products = $repository->createQueryBuilder('p')
+                    ->where('p.' . $request->get('filterbyfield') . ' LIKE :pattern')
+                    ->setParameter('pattern', $request->get('pattern') . '%')
+                    ->getQuery()->getResult();
+            }
         } else {
             $products = $repository->findAll();
         }
         $responseProducts = array();
-        if ($products) {
+        if (isset($products)) {
             $count=count($products);
             $products=array_slice($products,($page-1)*$perpage,$perpage);
             foreach ($products as $product) {

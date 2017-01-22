@@ -36,7 +36,7 @@ class User implements AdvancedUserInterface
     protected $role;
 
     /**
-     * @Assert\Length(max=4096)
+     * @Assert\Length(max=4096, min=6, minMessage = "Password can not be shorter than 6 characters.")
      */
     protected $plainPassword;
     /**

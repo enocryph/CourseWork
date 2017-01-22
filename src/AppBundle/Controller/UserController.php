@@ -77,10 +77,11 @@ class UserController extends Controller
             $this->get('mailer')->send($message);
             return $this->redirectToRoute('homepage');
         }
-
+        $errors = (string) $form->getErrors(true);
         return $this->render(
             'register.html.twig',
-            array('form' => $form->createView())
+            array('form' => $form->createView(),
+                'errors'=>$errors)
         );
     }
 
