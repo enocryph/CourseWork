@@ -309,18 +309,23 @@
             var ajaxCategoryLink = 'ajax/category/';
 
             var activeLi; //variable for delegation
-            var activeCategory = '';
+//            var activeCategory = '';
 
             var paginationWrapper = document.getElementById('pagination-wrapper');
             var paginationUlCSS = 'btn-group';
             var paginationLiCSS = 'btn-group__item'
 
             var activePaginator;
-            var activePaginatorNumber = 1;
+//            var activePaginatorNumber = 1;
             var elementsInDatabase;
 
             var paginationButtons = 2;
-            var paginatorElementsOnPage = 6;
+//            var paginatorElementsOnPage = 6;
+            var paginatorElementsOnPage = options.perPage;
+            var activeCategory = options.categoryID;
+            var activePaginatorNumber = options.page;
+
+
             var paginationButtonsCount;
 
             rootElement.onclick = function (event) {
@@ -333,6 +338,7 @@
             //initial requests
             buildCategoryTree(null, rootElement);
             getProductsAjax();
+
 
             function checkForEmpty(count) {
                 if (count) {
@@ -387,6 +393,7 @@
             }
             function getProductsAjax() {
                 deleteChilds(productsGrid);
+                history.replaceState(null, null, '/catalog/?category='+activeCategory+'&page='+activePaginatorNumber);
                 $.getJSON(ajaxProductLink, {
                     category: activeCategory,
                     page: activePaginatorNumber,
@@ -633,7 +640,11 @@
             }
         }
 
-        $("#category-tree").catalogBuilder();
+        $("#category-tree").catalogBuilder({
+            categoryID: 4,
+            page: 1,
+            perPage: 6
+        });
 
 
 
