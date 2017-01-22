@@ -67,7 +67,7 @@ class CatalogController extends Controller
         }
 
         $responseProducts = array();
-        if ($products) {
+        if (isset($products)) {
             $count=count($products);
             $products=array_slice($products,($page-1)*$perpage,$perpage);
             foreach ($products as $product) {
