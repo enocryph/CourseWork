@@ -31,6 +31,8 @@ class User implements AdvancedUserInterface
 
     /**
      * @ORM\Column(type="string", length=40)
+     * @Assert\Length(max=16, min=4, minMessage = "Name can not be shorter than 4 characters.",
+     *     maxMessage = "Name can not be longer than 16 characters.")
      */
     protected $name;
 

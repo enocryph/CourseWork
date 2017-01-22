@@ -97,6 +97,7 @@ class SecurityController extends Controller
                     'text/html'
                 );
             $this->get('mailer')->send($message);
+            $this->addFlash('success', 'Success. Check your E-mail for activation link');
             return $this->redirectToRoute('homepage');
         }
         $errors = (string) $form->getErrors(true);
