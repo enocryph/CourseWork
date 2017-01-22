@@ -12,16 +12,18 @@
         {% endfor %}
 
         <h1 class="project-name">Course Work Product's Catalog</h1>
-        <p class="project-description">Shit Happens</p>
+
 
         {% if app.user %}
-            <p class="user-greetings">Hello,
+            <p class="project-description">Hello,
                 <span class="username">{{ app.user.name }}</span>,
                 start using
                 <a href="{{ path('Catalog_index')}}" class="link-border-animation link-orange">Catalog</a>
-                now!
+                now!</p>
+            <p class="user-greetings">
             </p>
         {% else %}
+            <p class="project-description">Login or register for access catalog.</p>
             <a href="{{ path('login')}}" class="btn btn-default btn-150px btn-margin">Login</a>
             <a href="{{ path('registration')}}" class="btn btn-default btn-150px btn-margin">Register</a>
             <p class="password-reset-wrapper">

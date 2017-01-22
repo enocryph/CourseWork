@@ -114,6 +114,7 @@ class SecurityController extends Controller
      */
     public function resetPasswordAction(Request $request, $token)
     {
+
         $resetForm = $this->createForm(ResetPasswordType::class);
         $resetForm->handleRequest($request);
 

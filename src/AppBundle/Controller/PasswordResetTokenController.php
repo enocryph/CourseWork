@@ -70,7 +70,6 @@ class PasswordResetTokenController extends Controller
             $this->addFlash('success', 'Please check your email for reset password link.');
             return $this->redirectToRoute('homepage');
         }
-
         return $this->render('User_forgottenPassword.html.twig', array(
             'form' => $form->createView()
         ));

@@ -5,13 +5,13 @@
 <div class="page-wrapper">
     <div class="vertical-middle">
         <div class="col-md-4 col-md-offset-4">
+            <h3>Registration</h3>
             {{ form_start(form) }}
             {% if errors %}
                 <div class="alert alert-danger">
                     {{ errors }}
                 </div>
             {% endif %}
-            {{ form_errors(form.plainPassword) }}
 c            <div class="form-group">
                     {{ form_row(form.name, {'attr': {'class': 'form-control'},
                                             'label_attr': {'class': 'control-label'}
