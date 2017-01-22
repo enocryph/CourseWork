@@ -24,6 +24,9 @@ class UserType extends AbstractType
                 'type' => PasswordType::class,
                 'first_options' => ['label' => 'Password'],
                 'second_options' => ['label' => 'Confirm Password'],
+                'invalid_message' => 'Passwords do not match.',
+                'error_bubbling' => true,
+
             ]);
     }
 
