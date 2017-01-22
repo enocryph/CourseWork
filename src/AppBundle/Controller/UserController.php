@@ -5,7 +5,9 @@ namespace AppBundle\Controller;
 use AppBundle\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component\HttpFoundation\Request;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
  * User controller.
@@ -14,6 +16,9 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component
  */
 class UserController extends Controller
 {
+
+
+
     /**
      * Lists all user entities.
      *
@@ -29,6 +34,52 @@ class UserController extends Controller
         return $this->render('user/index.html.twig', array(
             'users' => $users,
         ));
+    }
+
+    /**
+     * Lists all users entities.
+     *
+     * @Route("/ajax", name="user_ajax")
+     * @Method("GET")
+     */
+    public function ajaxUserAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $repository=$em->getRepository('AppBundle:User');
+        $page=$request->get('page');
+        $perpage=$request->get('perpage');
+        $count=0;
+        if ($request->get('sortbyfield'))
+        {
+            $users = $repository->createQueryBuilder('u')
+                ->orderBy('u.'.$request->get('sortbyfield'),$request->get('order'))
+                ->getQuery()->getResult();
+        } elseif ($request->get('filterbyfield')) {
+
+            $users = $repository->createQueryBuilder('u')
+                ->where('u.' . $request->get('filterbyfield') . ' LIKE :pattern')
+                ->setParameter('pattern', '%'. $request->get('pattern') . '%')
+                ->getQuery()->getResult();
+
+        } else {
+            $users = $repository->findAll();
+        }
+        $responseusers = array();
+        if (isset($users)) {
+            $count=count($users);
+            $users=array_slice($users,($page-1)*$perpage,$perpage);
+            foreach ($users as $product) {
+                $responseusers[] = array(
+                    'id'=>$product->getId(),
+                    'name'=>$product->getName(),
+                    'email'=>$product->getEmail(),
+                    'enabled'=>$product->getEnabled(),
+                    'role'=>$product->getRole(),
+                );
+            }
+        }
+
+        return new JsonResponse(array('users'=>$responseusers,'count'=>$count));
     }
 
     /**
@@ -107,4 +158,6 @@ class UserController extends Controller
             ->getForm()
         ;
     }
+
+
 }
