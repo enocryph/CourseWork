@@ -25,18 +25,19 @@ class CatalogController extends Controller
      */
     public function indexAction(Request $request)
     {
-        if ($request->get('category')){
-            $category=$request->get('category');
+        dump($request->get('category'));
+        if  (is_int($request->get('category'))) {
+
+                $category = $request->get('category');
+
         } else {
             $category= 'null';
         }
-        if ($request->get('page')){
+        if (is_int($request->get('page'))){
             $page=$request->get('page');
         } else {
             $page=1;
         }
-        dump($category);
-        dump($page);
         return $this->render('catalog_index.html.twig', array('category'=>$category, 'page'=>$page));
     }
     /**
