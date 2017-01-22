@@ -1,124 +1,110 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: qwerty
- * Date: 12.01.17
- * Time: 23:04
- */
 
 namespace AppBundle\Controller;
 
-
-use Symfony\Component\HttpFoundation\Request;
+use AppBundle\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use AppBundle\Entity\ActivationToken;
-use AppBundle\Entity\PasswordResetToken;
-use AppBundle\Entity\User;
-use AppBundle\Form\ResetPasswordType;
-use AppBundle\Form\UserType;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
-use AppBundle\Service\TokenGenerator;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component\HttpFoundation\Request;
 
+/**
+ * User controller.
+ *
+ * @Route("user")
+ */
 class UserController extends Controller
 {
     /**
-     * @Route("/register", name="user_registration")
+     * Lists all user entities.
+     *
+     * @Route("/", name="user_index")
+     * @Method("GET")
      */
-    public function newAction(Request $request)
+    public function indexAction()
     {
-        $user = new User();
-        $form = $this->createForm(UserType::class, $user);
+        $em = $this->getDoctrine()->getManager();
 
-        $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
+        $users = $em->getRepository('AppBundle:User')->findAll();
 
-            // Encode the new users password
-            $encoder = $this->get('security.password_encoder');
-            $password = $encoder->encodePassword($user, $user->getPlainPassword());
-            $user->setPassword($password);
-            $user->setEnabled(false);
-            // Set their role
-            $user->setRole('ROLE_USER');
-
-            // Save
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($user);
-
-
-            $token = new TokenGenerator();
-            $activationToken = new ActivationToken();
-            $activationToken->setToken($token->generateToken());
-            $activationToken->setEmail($user->getEmail());
-
-            $em->persist($activationToken);
-            $em->flush();
-
-            $message = \Swift_Message::newInstance(null)
-                ->setSubject('Welcome')
-                ->setFrom('courseworkproductscatalog@gmial.com')
-                ->setTo($user->getEmail())
-                ->setBody(
-                    $this->renderView('email_register.html.twig',
-                        array(
-                            'username' => $user->getName(),
-                            'email' => $user->getEmail(),
-                            'url' => $this->generateUrl('user_activate', array(
-                                'token' => $activationToken->getToken()
-                            ),
-                                UrlGeneratorInterface::ABSOLUTE_URL),
-                        )
-                    ),
-                    'text/html'
-                );
-            $this->get('mailer')->send($message);
-            return $this->redirectToRoute('homepage');
-        }
-        $errors = (string) $form->getErrors(true);
-        return $this->render(
-            'register.html.twig',
-            array('form' => $form->createView(),
-                'errors'=>$errors)
-        );
+        return $this->render('user/index.html.twig', array(
+            'users' => $users,
+        ));
     }
 
     /**
-     * @Route("/passwordreset/{token}", name="user_reset_password")
+     * Finds and displays a user entity.
+     *
+     * @Route("/{id}", name="user_show")
+     * @Method("GET")
      */
-    public function resetPasswordAction(Request $request, $token)
+    public function showAction(User $user)
     {
-        $resetForm = $this->createForm(ResetPasswordType::class);
-        $resetForm->handleRequest($request);
+        $deleteForm = $this->createDeleteForm($user);
 
-        $em = $this->getDoctrine()->getManager();
-        $tokenEntry = $em->getRepository('AppBundle:PasswordResetToken')
-            ->findOneBy(array('token' => $token));
-
-        if(!$tokenEntry){
-            $this->addFlash('error', 'Provided token is not valid');
-            return $this->redirectToRoute('homepage');
-        }
-        if ($resetForm->isSubmitted() && $resetForm->isValid()) {
-            $userObject = $em->getRepository('AppBundle:User')
-                ->findOneBy(array('id' => $tokenEntry->getUserId()));
-
-            $em->remove($tokenEntry);
-
-            $plainPassword = $resetForm['password']->getData();
-            $encoder = $this->container->get('security.password_encoder');
-            $encoded = $encoder->encodePassword($userObject, $plainPassword);
-            $userObject->setPassword($encoded);
-            $em->persist($userObject);
-
-            $em->flush();
-            return $this->redirectToRoute('login');
-        }
-        return $this->render('reset_password.html.twig', array(
-            'token' => $token,
-            'resetForm' => $resetForm->createView()
+        return $this->render('user/show.html.twig', array(
+            'user' => $user,
+            'delete_form' => $deleteForm->createView(),
         ));
+    }
+
+    /**
+     * Displays a form to edit an existing user entity.
+     *
+     * @Route("/{id}/edit", name="user_edit")
+     * @Method({"GET", "POST"})
+     */
+    public function editAction(Request $request, User $user)
+    {
+        $deleteForm = $this->createDeleteForm($user);
+        $editForm = $this->createForm('AppBundle\Form\UserType', $user);
+        $editForm->handleRequest($request);
+
+        if ($editForm->isSubmitted() && $editForm->isValid()) {
+            $this->getDoctrine()->getManager()->flush();
+
+            return $this->redirectToRoute('user_edit', array('id' => $user->getId()));
+        }
+
+        return $this->render('user/edit.html.twig', array(
+            'user' => $user,
+            'edit_form' => $editForm->createView(),
+            'delete_form' => $deleteForm->createView(),
+        ));
+    }
+
+    /**
+     * Deletes a user entity.
+     *
+     * @Route("/{id}", name="user_delete")
+     * @Method("DELETE")
+     */
+    public function deleteAction(Request $request, User $user)
+    {
+        $form = $this->createDeleteForm($user);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $em = $this->getDoctrine()->getManager();
+            $em->remove($user);
+            $em->flush($user);
+        }
+
+        return $this->redirectToRoute('user_index');
+    }
+
+    /**
+     * Creates a form to delete a user entity.
+     *
+     * @param User $user The user entity
+     *
+     * @return \Symfony\Component\Form\Form The form
+     */
+    private function createDeleteForm(User $user)
+    {
+        return $this->createFormBuilder()
+            ->setAction($this->generateUrl('user_delete', array('id' => $user->getId())))
+            ->setMethod('DELETE')
+            ->getForm()
+        ;
     }
 }

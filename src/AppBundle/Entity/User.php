@@ -22,6 +22,10 @@ class User implements AdvancedUserInterface
 
     /**
      * @ORM\Column(type="string", length=255, unique=true)
+     * @Assert\Email(
+     * message = "The email '{{ value }}' is not a valid email.",
+     * checkMX = true
+     * )
      */
     protected $email;
 
