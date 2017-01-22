@@ -393,6 +393,7 @@
             }
             function getProductsAjax() {
                 deleteChilds(productsGrid);
+                history.replaceState(null, null, '/catalog/?category='+activeCategory+'&page='+activePaginatorNumber);
                 $.getJSON(ajaxProductLink, {
                     category: activeCategory,
                     page: activePaginatorNumber,
