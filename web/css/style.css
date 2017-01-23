@@ -381,3 +381,37 @@ html, body {
     bottom: 0;
     background: #ebebeb;
 }
+
+.table-header {
+    position: relative;
+    padding-left: 15px !important;
+    padding-right: 15px !important;
+}
+
+.table-header-top:after {
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    right: 8px;
+    top: 12px;
+    background: url('../src/arrow-down.png');
+    content: '';
+}
+
+.table-header-bottom:after {
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    right: 8px;
+    top: 12px;
+    background: url('../src/arrow-down.png');
+    content: '';
+}
+
+#entities-grid table {
+    text-align: center;
+}
+
+.active-row {
+    background: #000;
+}
