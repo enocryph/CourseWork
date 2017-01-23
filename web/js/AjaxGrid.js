@@ -20,6 +20,7 @@ $.fn.ajaxgrid = function(options) {
     var sortOrder;
     var filterbyfield;
     var pattern;
+    var activeInput;
     rootElement.appendChild(createGridTable());
     declareInputKeyDown();
     getProductsAjax();
@@ -44,6 +45,7 @@ $.fn.ajaxgrid = function(options) {
         for (var i = 0; i < options.sortableColumns.length; i++) {
             var tableHeader = document.createElement('th');
             tableHeader.classList.add('table-header');
+            tableHeader.classList.add('text-center');
             for (var j = 0; j < options.filterableColumns.length; j++) {
                 if (options.sortableColumns[i] == options.filterableColumns[j]) {
                     var input = document.createElement('input');
@@ -187,7 +189,6 @@ $.fn.ajaxgrid = function(options) {
         }, function(JSON_Data) {
             var products = JSON_Data[key];
             elementsInDatabase = JSON_Data.count;
-            checkForEmpty(elementsInDatabase);
             createPaginationView(paginatorElementsOnPage, elementsInDatabase, activePaginatorNumber);
             $.each(products, function(index, element) {
                 var product = createTableRow(element);
@@ -200,6 +201,8 @@ $.fn.ajaxgrid = function(options) {
         if (activeRow && activeRow !=node) {
             activeRow.classList.remove('active-row');
             activeRow.removeAttribute('order');
+            activeRow.classList.remove('table-header-bottom');
+            activeRow.classList.remove('table-header-top');
         }
         activeRow = node;
         activeRow.classList.add('active-row');
@@ -208,26 +211,36 @@ $.fn.ajaxgrid = function(options) {
     }
     function delegateTableHeaderClick(event) {
         var target = event.target;
-        if (target.tagName === 'INPUT' || target.tagName === "THEAD") {
-            return;
+        if (target.tagName === 'INPUT') {
+            clearInputs(target);
         } else if (target.tagName === 'TH' && (target.getAttribute('inactive') != 'false')) {
             filterbyfield = '';
             pattern = '';
             if (target.getAttribute('order') === 'ASC') {
                 target.setAttribute('order', 'DESC');
+                target.classList.add('table-header-bottom');
+                target.classList.remove('table-header-top');
+
             } else {
+                target.classList.remove('table-header-bottom');
+                target.classList.add('table-header-top');
                 target.setAttribute('order', 'ASC');
             }
             highlightRow(target);
             getProductsAjax();
+        } else if (target.tagName === "THEAD") {
+            return;
         }
     }
     function onInputKeyDown(event) {
+        activeInput = event.target;
         if (event.keyCode === 13) {
             if (event.target.value) {
                 if (activeRow) {
                     activeRow.classList.remove('active-row');
                     activeRow.removeAttribute('order');
+                    activeRow.classList.remove('table-header-bottom');
+                    activeRow.classList.remove('table-header-top');
                 }
                 activeRowField = '';
                 sortOrder = '';
@@ -255,17 +268,6 @@ $.fn.ajaxgrid = function(options) {
             }
         }
     }
-    function checkForEmpty(count) {
-        if (count) {
-            return;
-        }
-
-        else {
-            var h2 = document.createElement('h2');
-            h2.innerHTML = 'There is no products here';
-            productsGrid.appendChild(h2);
-        }
-    }
     function checkOptions(options) {
         if (!options.dataUrl) {
             throw 'Wrong "dataUrl" exception';
@@ -278,6 +280,20 @@ $.fn.ajaxgrid = function(options) {
         }
         if (!options.rowsPerPage) {
             options.rowsPerPage = 5;
+        }
+    }
+    function clearInputs(target) {
+        var inputs = document.getElementsByClassName('filter-input');
+        for (var i = 0; i < inputs.length; i++) {
+            if (inputs[i].getAttribute('field') === filterbyfield && activeInput !== target) {
+                inputs[i].value = '';
+                activeRowField = '';
+                sortOrder = '';
+                filterbyfield = '';
+                pattern = '';
+                activePaginatorNumber =1;
+                getProductsAjax();
+            }
         }
     }
 }

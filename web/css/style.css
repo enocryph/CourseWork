@@ -386,6 +386,12 @@ html, body {
     position: relative;
     padding-left: 15px !important;
     padding-right: 15px !important;
+    text-transform: uppercase;
+    font-weight: 600 !important;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
 
 .table-header-top:after {
@@ -393,7 +399,7 @@ html, body {
     width: 16px;
     height: 16px;
     right: 8px;
-    top: 12px;
+    bottom: 11px;
     background: url('../src/arrow-down.png');
     content: '';
 }
@@ -403,8 +409,8 @@ html, body {
     width: 16px;
     height: 16px;
     right: 8px;
-    top: 12px;
-    background: url('../src/arrow-down.png');
+    bottom: 11px;
+    background: url('../src/arrow-up.png');
     content: '';
 }
 
@@ -413,5 +419,5 @@ html, body {
 }
 
 .active-row {
-    background: #000;
+    color: #ee9f30;
 }
