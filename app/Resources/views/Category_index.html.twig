@@ -1,0 +1,31 @@
+{% extends 'base.html.twig' %}
+{% block stylesheets %}
+    <link rel="stylesheet" href=" {{ asset('css/style.css') }} ">
+{% endblock %}
+
+{% block title %}Category List{% endblock %}
+
+{% block body %}
+
+    <div id="category-tree" class="col-sm-12 col-xs-12 col-md-12 col-ld-12">
+        <div class="category-create-link-wrapper">
+            <a class="category-create-link" href="{{ path('category_new') }}">Create a new category</a>
+        </div>
+    </div>
+
+
+    {% block javascripts %}
+        <script src="{{ asset('js/Categories.js') }}"></script>
+    {% endblock %}
+
+    <script>
+        $("#category-tree").categoryView({
+            dataUrl: 'http://127.0.0.1:8000/category/ajax/',
+            editUrl: 'http://127.0.0.1:8000/category/'
+        });
+    </script>
+
+
+
+
+    {% endblock body %}

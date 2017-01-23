@@ -1,0 +1,53 @@
+{% extends 'base.html.twig' %}
+{% block title %}Register Page{% endblock %}
+
+{% block body %}
+<div class="page-wrapper">
+    <div class="vertical-middle">
+        <div class="col-md-4 col-md-offset-4">
+            <h3>Registration</h3>
+            {{ form_start(form) }}
+            {% if errors %}
+                <div class="alert alert-danger">
+                    {{ errors }}
+                </div>
+            {% endif %}
+c            <div class="form-group">
+                    {{ form_row(form.name, {'attr': {'class': 'form-control'},
+                                            'label_attr': {'class': 'control-label'}
+                                            })
+                    }}
+                    {{ form_row(form.email, {'attr': {'class': 'form-control'},
+                                            'label_attr': {'class': 'control-label'}
+                                            })
+                    }}
+                    {{ form_row(form.plainPassword.first, {'attr': {'class': 'form-control'},
+                                                          'label_attr': {'class': 'control-label'}
+                                                          })
+                    }}
+                    {{ form_row(form.plainPassword.second, {'attr': {'class': 'form-control'},
+                                                           'label_attr': {'class': 'control-label'}
+                                                           })
+                    }}
+            </div>
+            <div class="form-group">
+                <button type="submit" class="btn btn-warning btn-150px btn-margin">
+                    <i class="fa fa-btn fa-sign-in"></i> Register
+                </button>
+                <a href="{{ path('homepage')}}" class="btn btn-default btn-150px btn-margin">Homepage</a>
+            </div>
+            {{ form_end(form) }}
+        </div>
+        <footer class="footer">
+            <p class="footer-text">
+                Git repository <a href="https://github.com/enocryph/CourseWork"
+                                  class="link-border-animation link-black">here</a>.
+            </p>
+        </footer>
+    </div>
+</div>
+{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href=" {{ asset('css/style.css') }} ">
+{% endblock %}

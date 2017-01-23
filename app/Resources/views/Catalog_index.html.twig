@@ -1,0 +1,32 @@
+{% extends 'base.html.twig' %}
+{% block stylesheets %}
+    <link rel="stylesheet" href=" {{ asset('css/style.css') }} ">
+{% endblock %}
+{% block title %}Catalog{% endblock %}
+{% block body %}
+    <div class="catalog-wrapper">
+        <div id="category-tree" class="col-md-2 col-xs-12 col-lg-2 col-sm-4"></div>
+        <div id="products-grid" class="col-md-10 col-xs-12 col-sm-8 col-lg-10 col-md-offset-2
+        col-sm-offset-4 col-lg-offset-2">
+
+        </div>
+        <div id="pagination" class="col-md-10 col-xs-12 col-sm-8 col-lg-10 col-md-offset-2
+        col-sm-offset-4 col-lg-offset-2">
+            <div id="pagination-wrapper" class="zui-pager col-md-12 col-xs-12 col-sm-12 col-lg-12 text-center">
+            </div>
+        </div>
+    </div>
+
+    {% block javascripts %}
+        <script src="{{ asset('js/CatalogPlugin.js') }}"></script>
+    {% endblock %}
+
+    <script>
+        $("#category-tree").catalogBuilder({
+            categoryID: {{ category }},
+            page: {{ page }},
+            perPage: 6
+        });
+    </script>
+
+{% endblock %}

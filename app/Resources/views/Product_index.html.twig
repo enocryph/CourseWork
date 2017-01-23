@@ -1,0 +1,35 @@
+{% extends 'base.html.twig' %}
+{% block stylesheets %}
+    <link rel="stylesheet" href=" {{ asset('css/style.css') }} ">
+{% endblock %}
+{% block body %}
+    <h1 class="text-center">Products list</h1>
+    <ul>
+        <li>
+            <a href="{{ path('product_new') }}">Create a new product</a>
+        </li>
+    </ul>
+    <div id="entities-grid">
+    </div>
+    <div id="pagination-wrapper" class="zui-pager col-md-12 col-xs-12 col-sm-12 col-lg-12 text-center">
+    </div>
+
+    {% block javascripts %}
+        <script src="{{ asset('js/AjaxGrid.js') }}"></script>
+    {% endblock %}
+
+    <script>
+        $("#entities-grid").ajaxgrid({
+            dataUrl: "http://127.0.0.1:8000/product/ajax",
+            editUrl: "http://127.0.0.1:8000/product/",
+            sortableColumns: ["id", "name", "description", "dateOfCreation",
+                "dateOfLastUpdate", "isActive", "uniqueIdentifier"],
+            filterableColumns: ["id", "name", "description", "dateOfCreation",
+                "dateOfLastUpdate", "isActive", "uniqueIdentifier"],
+            rowsPerPage: 5,
+            key: 'products'
+        });
+    </script>
+
+
+{% endblock %}
