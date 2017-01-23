@@ -132,18 +132,21 @@ class SecurityController extends Controller
 
             $em->remove($tokenEntry);
 
-            $plainPassword = $resetForm['password']->getData();
+            $plainPassword = $resetForm['plainPassword']['first']->getData();
             $encoder = $this->container->get('security.password_encoder');
             $encoded = $encoder->encodePassword($userObject, $plainPassword);
             $userObject->setPassword($encoded);
             $em->persist($userObject);
 
             $em->flush();
-            return $this->redirectToRoute('login');
+            $this->addFlash('success', 'Password changed.');
+            return $this->redirectToRoute('homepage');
         }
+        $errors = (string) $resetForm->getErrors(true);
         return $this->render('User_passwordReset.html.twig', array(
             'token' => $token,
-            'resetForm' => $resetForm->createView()
+            'resetForm' => $resetForm->createView(),
+            'errors'=>$errors
         ));
     }
 }
