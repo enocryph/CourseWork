@@ -1,41 +1,58 @@
 {% extends 'base.html.twig' %}
-
+{% block stylesheets %}
+    <link rel="stylesheet" href=" {{ asset('css/style.css') }} ">
+{% endblock %}
 {% block body %}
-    <h1>Categories list</h1>
-
-    <table>
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Title</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for category in categories %}
-            <tr>
-                <td><a href="{{ path('category_show', { 'id': category.id }) }}">{{ category.id }}</a></td>
-                <td>{{ category.title }}</td>
-                <td>
-                    <ul>
-                        <li>
-                            <a href="{{ path('category_show', { 'id': category.id }) }}">show</a>
-                        </li>
-                        <li>
-                            <a href="{{ path('category_edit', { 'id': category.id }) }}">edit</a>
-                        </li>
-                    </ul>
-                </td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-
+    {#<h1 class="text-center">Categories list</h1>#}
     <ul>
         <li>
             <a href="{{ path('category_new') }}">Create a new category</a>
         </li>
     </ul>
+    {#<table>#}
+        {#<thead>#}
+            {#<tr>#}
+                {#<th>Id</th>#}
+                {#<th>Title</th>#}
+                {#<th>Actions</th>#}
+            {#</tr>#}
+        {#</thead>#}
+        {#<tbody>#}
+        {#{% for category in categories %}#}
+            {#<tr>#}
+                {#<td><a href="{{ path('category_show', { 'id': category.id }) }}">{{ category.id }}</a></td>#}
+                {#<td>{{ category.title }}</td>#}
+                {#<td>#}
+                    {#<ul>#}
+                        {#<li>#}
+                            {#<a href="{{ path('category_show', { 'id': category.id }) }}">show</a>#}
+                        {#</li>#}
+                        {#<li>#}
+                            {#<a href="{{ path('category_edit', { 'id': category.id }) }}">edit</a>#}
+                        {#</li>#}
+                    {#</ul>#}
+                {#</td>#}
+            {#</tr>#}
+        {#{% endfor %}#}
+        {#</tbody>#}
+    {#</table>#}
+
+    <div id="category-tree" class="col-sm-12 col-xs-12 col-md-12 col-ld-12">
+        <div class="category-create-link-wrapper">
+            <a class="category-create-link" href="{{ path('category_new') }}">Create a new category</a>
+        </div>
+    </div>
+
+
+    {% block javascripts %}
+        <script src="{{ asset('js/Categories.js') }}"></script>
+    {% endblock %}
+
+    <script>
+        $("#category-tree").categoryView();
+    </script>
+
+
 
 
     {% endblock body %}
