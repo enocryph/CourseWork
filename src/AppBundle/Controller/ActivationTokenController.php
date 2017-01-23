@@ -29,7 +29,9 @@ class ActivationTokenController extends Controller
         $em = $this->getDoctrine()->getManager();
         $tokenEntry = $em->getRepository('AppBundle:ActivationToken')
             ->findOneBy(array('token' => $token));
-
+        if (!$tokenEntry) {
+            return $this->redirectToRoute('homepage');
+        }
         $userObject = $em->getRepository('AppBundle:User')
             ->findOneBy(array('email' => $tokenEntry->getEmail()));
 
@@ -38,6 +40,7 @@ class ActivationTokenController extends Controller
 
         $em->remove($tokenEntry);
         $em->flush();
+        $this->addFlash('success', 'Account activated.');
         return $this->redirectToRoute('homepage');
     }
 }
