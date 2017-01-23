@@ -167,15 +167,16 @@ html, body {
 
 #category-tree {
     display: inline-block;
-    position: relative;
     /*width: 300px;*/
     padding: 0;
     height: 100vh;
     background: #ebebeb;
     position: fixed;
+    top: 0;
     z-index: 1000;
     overflow-y: auto;
     overflow-x: auto;
+    font-weight: 400;
 
 }
 
@@ -420,4 +421,51 @@ html, body {
 
 .active-row {
     color: #ee9f30;
+}
+
+.category-create-link {
+    display: block;
+    font-size: 20px;
+    text-decoration: none;
+    color: #000;
+}
+
+.category-create-link:hover {
+    text-decoration: none;
+    color: #000;
+}
+
+.category-create-link:active {
+    color: #000;
+}
+
+.category-create-link-wrapper {
+    text-align: center;
+    transition: 0.5s;
+}
+
+.category-create-link-wrapper:hover {
+    background: #ee9f30;
+    transition: 0.5s;
+}
+
+.category-edit-link {
+    color: #000;
+    font-weight: 600;
+    text-transform: uppercase;
+    border-bottom: 1px solid transparent;
+    transition: 0.5s;
+    font-size: 18px;
+}
+
+.category-edit-link:hover {
+    color: #000;
+    border-color: black;
+    transition: 1s;
+    text-decoration: none;
+}
+
+.btn-category-edit {
+    height: 100%;
+    margin-right: 40px;
 }
