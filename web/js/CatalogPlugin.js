@@ -48,6 +48,7 @@ $.fn.catalogBuilder = function(options) {
         else {
             var h2 = document.createElement('h2');
             h2.innerHTML = 'There is no products here';
+            h2.classList.add('text-center');
             productsGrid.appendChild(h2);
         }
     }
