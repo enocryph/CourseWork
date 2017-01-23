@@ -424,6 +424,7 @@ html, body {
 }
 
 .category-create-link {
+    display: block;
     font-size: 20px;
     text-decoration: none;
     color: #000;
@@ -440,7 +441,6 @@ html, body {
 
 .category-create-link-wrapper {
     text-align: center;
-    padding: 15px;
     transition: 0.5s;
 }
 
