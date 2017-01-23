@@ -56,10 +56,12 @@ class ProductController extends Controller
         } elseif ($request->get('filterbyfield')) {
             if (($request->get('filterbyfield') == 'dateOfCreation') || ($request->get('filterbyfield') == 'dateOfLastUpdate')){
                 $date = date_create($request->get('pattern'));
-                $products = $repository->createQueryBuilder('p')
-                    ->where('p.' . $request->get('filterbyfield') . ' >= :pattern')
-                    ->setParameter('pattern', date_format($date, 'Y-m-d H:i:s'))
-                    ->getQuery()->getResult();
+                if ($date) {
+                    $products = $repository->createQueryBuilder('p')
+                        ->where('p.' . $request->get('filterbyfield') . ' >= :pattern')
+                        ->setParameter('pattern', date_format($date, 'Y-m-d H:i:s'))
+                        ->getQuery()->getResult();
+                }
             } else {
                 $products = $repository->createQueryBuilder('p')
                     ->where('p.' . $request->get('filterbyfield') . ' LIKE :pattern')
