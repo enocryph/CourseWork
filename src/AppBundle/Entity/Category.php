@@ -37,8 +37,8 @@ class Category
 
     /**
      * Many Categories have One Category.
-     * @ORM\ManyToOne(targetEntity="Category", inversedBy="children")
-     * @ORM\JoinColumn(name="parent_id", referencedColumnName="id")
+     * @ORM\ManyToOne(targetEntity="Category", inversedBy="children", )
+     * @ORM\JoinColumn(name="parent_id", referencedColumnName="id" , onDelete="CASCADE")
      */
     private $parent;
 

@@ -7,7 +7,7 @@ $.fn.categoryAdmin = function(options) {
     var liControlOpenCSS = 'tree-item-control-opened';
     var liControlCloseCSS = 'tree-item-control-closed';
     var dataUrl = options.dataUrl;
-    var select = document.getElementById('appbundle_category_parent');
+    var select = document.getElementById(options.selectKey);
 
     rootElement.onclick = function (event) {
         delegateClick(event);
@@ -109,6 +109,9 @@ $.fn.categoryAdmin = function(options) {
     function checkOptions(options) {
         if (!options.dataUrl) {
             throw 'Wrong "dataUrl" exception';
+        }
+        if (!options.selectKey) {
+            throw 'Wrong key'
         }
     }
 }

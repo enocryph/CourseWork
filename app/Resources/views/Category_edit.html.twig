@@ -3,7 +3,7 @@
     <link rel="stylesheet" href=" {{ asset('css/style.css') }} ">
 {% endblock %}
 
-{% block title %}Category Edit{% endblock %}
+{% block title %}Edit Category{% endblock %}
 {% block body %}
 
 
@@ -51,7 +51,8 @@
 
     <script>
         $("#category-tree").categoryAdmin({
-            dataUrl: 'http://127.0.0.1:8000/category/ajax/'
+            dataUrl: 'http://127.0.0.1:8000/category/ajax/',
+            selectKey: 'appbundle_category_parent'
         });
     </script>
 

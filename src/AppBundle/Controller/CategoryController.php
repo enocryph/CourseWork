@@ -82,7 +82,7 @@ class CategoryController extends Controller
             $em->persist($category);
             $em->flush($category);
 
-            return $this->redirectToRoute('category_show', array('id' => $category->getId()));
+            return $this->redirectToRoute('category_index', array('id' => $category->getId()));
         }
 
         return $this->render('Category_new.html.twig', array(
@@ -124,7 +124,7 @@ class CategoryController extends Controller
                 $category->setParent(null);
             }
             $this->getDoctrine()->getManager()->flush();
-            return $this->redirectToRoute('category_edit', array('id' => $category->getId()));
+            return $this->redirectToRoute('category_index', array('id' => $category->getId()));
         }
 
         return $this->render('Category_edit.html.twig', array(

@@ -23,7 +23,7 @@
                     'label_attr': {'class': 'control-label'}
                 })
                 }}
-                {{ form_row(form.isActive, {
+                {{ form_row(form.isActive, {'attr': {'checked': 'checked'},
                     'label_attr': {'class': 'control-label'}
                 })
                 }}
@@ -44,7 +44,8 @@
 
     <script>
         $("#category-tree").categoryAdmin({
-            dataUrl: 'http://127.0.0.1:8000/category/ajax/'
+            dataUrl: 'http://127.0.0.1:8000/category/ajax/',
+            selectKey: 'appbundle_category_parent'
         });
     </script>
 

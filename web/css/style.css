@@ -464,3 +464,8 @@ html, body {
     transition: 1s;
     text-decoration: none;
 }
+
+.btn-category-edit {
+    height: 100%;
+    margin-right: 40px;
+}
