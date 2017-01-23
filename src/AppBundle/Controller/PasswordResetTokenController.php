@@ -20,11 +20,15 @@ use Symfony\Component\Validator\Constraints\Email;
 use AppBundle\Entity\PasswordResetToken;
 use AppBundle\Form\EmailResetPasswordType;
 use AppBundle\Service\TokenGenerator;
-
+/**
+ * PasswordResetToken controller.
+ *
+ * @Route("passwordreset")
+ */
 class PasswordResetTokenController extends Controller
 {
     /**
-     * @Route("/passwordreset", name="forgotpassword")
+     * @Route("/", name="forgotpassword")
      */
     public function forgotPasswordAction(Request $request)
     {
@@ -72,6 +76,47 @@ class PasswordResetTokenController extends Controller
         }
         return $this->render('User_forgottenPassword.html.twig', array(
             'form' => $form->createView()
+        ));
+    }
+
+    /**
+     * @Route("/{token}", name="user_reset_password")
+     */
+    public function resetPasswordAction(Request $request, $token)
+    {
+
+        $resetForm = $this->createForm(ResetPasswordType::class);
+        $resetForm->handleRequest($request);
+
+        $em = $this->getDoctrine()->getManager();
+        $tokenEntry = $em->getRepository('AppBundle:PasswordResetToken')
+            ->findOneBy(array('token' => $token));
+
+        if(!$tokenEntry){
+            $this->addFlash('error', 'Provided token is not valid');
+            return $this->redirectToRoute('homepage');
+        }
+        if ($resetForm->isSubmitted() && $resetForm->isValid()) {
+            $userObject = $em->getRepository('AppBundle:User')
+                ->findOneBy(array('id' => $tokenEntry->getUserId()));
+
+            $em->remove($tokenEntry);
+
+            $plainPassword = $resetForm['plainPassword']['first']->getData();
+            $encoder = $this->container->get('security.password_encoder');
+            $encoded = $encoder->encodePassword($userObject, $plainPassword);
+            $userObject->setPassword($encoded);
+            $em->persist($userObject);
+
+            $em->flush();
+            $this->addFlash('success', 'Password changed.');
+            return $this->redirectToRoute('homepage');
+        }
+        $errors = (string) $resetForm->getErrors(true);
+        return $this->render('User_passwordReset.html.twig', array(
+            'token' => $token,
+            'resetForm' => $resetForm->createView(),
+            'errors'=>$errors
         ));
     }
 }

@@ -15,7 +15,8 @@ use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use AppBundle\Entity\User;
+
+use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 
 class ResetPasswordType extends AbstractType
 {
@@ -25,15 +26,22 @@ class ResetPasswordType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder
-            ->add('password', PasswordType::class)
-        ;
+        $builder->add('plainPassword', RepeatedType::class, [
+            'type' => PasswordType::class,
+            'first_options' => ['label' => 'Password'],
+            'second_options' => ['label' => 'Confirm Password'],
+            'invalid_message' => 'Passwords do not match.',
+            'error_bubbling' => true,
+
+        ]);
     }
     /**
      * @param OptionsResolver $resolver
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-
+        $resolver->setDefaults(array(
+            'data_class' => 'AppBundle\Entity\User'
+        ));
     }
 }
