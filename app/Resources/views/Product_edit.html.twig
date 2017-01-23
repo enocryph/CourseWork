@@ -13,7 +13,7 @@
 
         <div id="products-grid" class="col-md-10 col-xs-12 col-sm-8 col-lg-10 col-md-offset-2
             col-sm-offset-4 col-lg-offset-2">
-            <img src="{{ asset('uploads/images/' ~ product.image) }}" alt="{{ product.name }}.picture">
+            <img class="project-edit-image" src="{{ asset('uploads/images/' ~ product.image) }}" alt="{{ product.name }}.picture">
             <h1>Product name: {{ product.name }}</h1>
             <p>Product id : {{ product.id }}</p>
             {{ form_start(edit_form) }}
@@ -44,17 +44,17 @@
                 }}
 
             </div>
-            <div class="form-group">
+            <div class="form-group text-left col-md-6 col-lg-6 col-sm-6 col-xs-6">
                 <button type="submit" class="btn btn-warning btn-150px btn-margin">
-                    <i class="fa fa-btn fa-sign-in"></i> Submit
+                    <i class="fa fa-btn fa-sign-in"></i> Save
                 </button>
+                {{ form_end(edit_form) }}
             </div>
-            {{ form_end(edit_form) }}
 
             <div class="form-group">
-                {{ form_start(delete_form) }}
-                <input type="submit" value="Delete" class="btn btn-danger btn-150px btn-margin">
-                {{ form_end(delete_form) }}
+            {{ form_start(delete_form, {'attr': {'class': 'col-md-6 col-lg-6 col-sm-6 col-xs-6 text-right'}}) }}
+            <input type="submit" value="Delete" class="btn btn-danger btn-150px btn-margin">
+            {{ form_end(delete_form) }}
             </div>
         </div>
     </div>

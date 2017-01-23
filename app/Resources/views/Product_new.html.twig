@@ -1,16 +1,66 @@
+
 {% extends 'base.html.twig' %}
+{% block stylesheets %}
+    <link rel="stylesheet" href=" {{ asset('css/style.css') }} ">
+{% endblock %}
 
+{% block title %}New Product{% endblock %}
 {% block body %}
-    <h1>Product creation</h1>
 
-    {{ form_start(form) }}
-        {{ form_widget(form) }}
-        <input type="submit" value="Create" />
-    {{ form_end(form) }}
 
-    <ul>
-        <li>
-            <a href="{{ path('product_index') }}">Back to the list</a>
-        </li>
-    </ul>
+    <div class="catalog-wrapper">
+        <div id="category-tree" class="col-md-2 col-xs-12 col-lg-2 col-sm-4"></div>
+
+        <div id="products-grid" class="col-md-10 col-xs-12 col-sm-8 col-lg-10 col-md-offset-2
+            col-sm-offset-4 col-lg-offset-2">
+            <h1>New Product</h1>
+            <img class="project-edit-image" src="{{ asset('uploads/images/' ~ product.image) }}" alt="{{ product.name }}.picture">
+            {{ form_start(form) }}
+            <div class="form-group">
+                {{ form_row(form.name, {'attr': {'class': 'form-control'},
+                    'label_attr': {'class': 'control-label'}
+                })
+                }}
+                {{ form_row(form.description, {'attr': {'class': 'form-control category-hidden-feild'},
+                    'label_attr': {'class': 'control-label'}
+                })
+                }}
+                {{ form_row(form.uniqueIdentifier, {'attr': {'class': 'form-control category-hidden-feild'},
+                    'label_attr': {'class': 'control-label'}
+                })
+                }}
+                {{ form_row(form.category, {'attr': {'class': 'form-control category-hidden-feild'},
+                    'label_attr': {'class': 'control-label'}
+                })
+                }}
+                {{ form_row(form.image, {'attr': {'class': 'form-control category-hidden-feild'},
+                    'label_attr': {'class': 'control-label'}
+                })
+                }}
+                {{ form_row(form.isActive, {
+                    'label_attr': {'class': 'control-label'}
+                })
+                }}
+
+            </div>
+            <div class="form-group">
+                <button type="submit" class="btn btn-warning btn-150px btn-margin">
+                    <i class="fa fa-btn fa-sign-in"></i> Create
+                </button>
+            </div>
+            {{ form_end(form) }}
+        </div>
+    </div>
+
+    {% block javascripts %}
+        <script src="{{ asset('js/CategoryAdmin.js') }}"></script>
+    {% endblock %}
+
+    <script>
+        $("#category-tree").categoryAdmin({
+            dataUrl: 'http://127.0.0.1:8000/category/ajax/',
+            selectKey: 'appbundle_product_category'
+        });
+    </script>
+
 {% endblock %}

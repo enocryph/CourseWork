@@ -118,7 +118,7 @@ class ProductController extends Controller
             $em->persist($product);
             $em->flush($product);
 
-            return $this->redirectToRoute('product_show', array('id' => $product->getId()));
+            return $this->redirectToRoute('product_index', array('id' => $product->getId()));
         }
 
         return $this->render('Product_new.html.twig', array(
@@ -127,21 +127,21 @@ class ProductController extends Controller
         ));
     }
 
-    /**
-     * Finds and displays a product entity.
-     *
-     * @Route("/{id}", name="product_show")
-     * @Method("GET")
-     */
-    public function showAction(Product $product)
-    {
-        $deleteForm = $this->createDeleteForm($product);
-
-        return $this->render('Product_show.html.twig', array(
-            'product' => $product,
-            'delete_form' => $deleteForm->createView(),
-        ));
-    }
+//    /**
+//     * Finds and displays a product entity.
+//     *
+//     * @Route("/{id}", name="product_show")
+//     * @Method("GET")
+//     */
+//    public function showAction(Product $product)
+//    {
+//        $deleteForm = $this->createDeleteForm($product);
+//
+//        return $this->render('Product_show.html.twig', array(
+//            'product' => $product,
+//            'delete_form' => $deleteForm->createView(),
+//        ));
+//    }
 
     /**
      * Displays a form to edit an existing product entity.
@@ -170,7 +170,7 @@ class ProductController extends Controller
 
             $this->getDoctrine()->getManager()->flush();
 
-            return $this->redirectToRoute('product_edit', array('id' => $product->getId()));
+            return $this->redirectToRoute('product_index', array('id' => $product->getId()));
         }
 
         return $this->render('Product_edit.html.twig', array(

@@ -4,12 +4,14 @@ namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * Product
  *
  * @ORM\Table(name="product")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\ProductRepository")
+ * @UniqueEntity("uniqueIdentifier")
  */
 class Product
 {
@@ -61,6 +63,7 @@ class Product
      * @var string
      *
      * @ORM\Column(name="uniqueIdentifier", type="string", length=255, unique=true)
+     *
      */
     private $uniqueIdentifier;
 

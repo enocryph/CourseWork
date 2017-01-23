@@ -120,8 +120,10 @@ class CategoryController extends Controller
         $editForm->handleRequest($request);
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {
-            if ($category->getParent()->getId() == $category->getId()) {
-                $category->setParent(null);
+            if ($category->getParent()!=null) {
+                if ($category->getParent()->getId() == $category->getId()) {
+                    $category->setParent(null);
+                }
             }
             $this->getDoctrine()->getManager()->flush();
             return $this->redirectToRoute('category_index', array('id' => $category->getId()));

@@ -63,7 +63,7 @@ $.fn.ajaxgrid = function(options) {
 
         }
         var tableHeader = document.createElement('th');
-        tableHeader.classList.add('table-header');
+        tableHeader.classList.add('table-header', 'text-center');
         tableHeader.setAttribute('inactive', 'false');
         tableHeader.innerHTML = 'Edit';
         tableRow.appendChild(tableHeader);
@@ -82,6 +82,7 @@ $.fn.ajaxgrid = function(options) {
         var tableItem = document.createElement('td');
         var editLink = document.createElement('a');
         editLink.setAttribute('href', editUrl+element.id+"/edit");
+        editLink.classList.add('btn', 'btn-default');
         editLink.innerHTML = 'Edit';
         tableItem.appendChild(editLink);
         tableRow.appendChild(tableItem);

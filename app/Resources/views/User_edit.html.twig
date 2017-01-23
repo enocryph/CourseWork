@@ -1,21 +1,48 @@
 {% extends 'base.html.twig' %}
+{% block title %}Edit user{% endblock %}
 
 {% block body %}
-    <h1>User edit</h1>
+    <div class="page-wrapper">
+        <div class="vertical-middle">
+            <div class="col-md-4 col-md-offset-4">
+                <h3>User Edit</h3>
+                {{ form_start(edit_form) }}
+                <div class="form-group">
+                    {{ form_row(edit_form.name, {'attr': {'class': 'form-control'},
+                        'label_attr': {'class': 'control-label'}
+                    })
+                    }}
+                    {{ form_row(edit_form.email, {'attr': {'class': 'form-control'},
+                        'label_attr': {'class': 'control-label'}
+                    })
+                    }}
+                    {{ form_row(edit_form.enabled, {
+                        'label_attr': {'class': 'control-label'}
+                    })
+                    }}
+                    {{ form_row(edit_form.role, {'attr': {'class': 'form-control'},
+                        'label_attr': {'class': 'control-label'}
+                    })
+                    }}
+                </div>
 
-    {{ form_start(edit_form) }}
-        {{ form_widget(edit_form) }}
-        <input type="submit" value="Edit" />
-    {{ form_end(edit_form) }}
+            <div class="form-group text-left col-md-6 col-lg-6 col-sm-6 col-xs-6">
+                <button type="submit" class="btn btn-warning btn-150px btn-margin">
+                    <i class="fa fa-btn fa-sign-in"></i> Save
+                </button>
+                {{ form_end(edit_form) }}
+            </div>
 
-    <ul>
-        <li>
-            <a href="{{ path('user_index') }}">Back to the list</a>
-        </li>
-        <li>
-            {{ form_start(delete_form) }}
-                <input type="submit" value="Delete">
+            <div class="form-group">
+            {{ form_start(delete_form, {'attr': {'class': 'col-md-6 col-lg-6 col-sm-6 col-xs-6 text-right'}}) }}
+            <input type="submit" value="Delete" class="btn btn-danger btn-150px btn-margin">
             {{ form_end(delete_form) }}
-        </li>
-    </ul>
+            </div>
+
+        </div>
+    </div>
+{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href=" {{ asset('css/style.css') }} ">
 {% endblock %}
