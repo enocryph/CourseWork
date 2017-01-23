@@ -49,8 +49,7 @@ class CategoryController extends Controller
             $categories = $em->getRepository("AppBundle:Category")->findBy(array('parent'=>null));
         }
         else {
-            $requestCategory = $em->getRepository("AppBundle:Category")->find($id);
-            $categories=$requestCategory->getChildren();
+            $categories = $em->getRepository("AppBundle:Category")->findBy(array('parent'=>$id));
         }
 
         $responseCategories=array();
@@ -121,8 +120,10 @@ class CategoryController extends Controller
         $editForm->handleRequest($request);
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {
+            if ($category->getParent()->getId() == $category->getId()) {
+                $category->setParent(null);
+            }
             $this->getDoctrine()->getManager()->flush();
-
             return $this->redirectToRoute('category_edit', array('id' => $category->getId()));
         }
 

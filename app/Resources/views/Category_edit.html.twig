@@ -1,21 +1,58 @@
 {% extends 'base.html.twig' %}
+{% block stylesheets %}
+    <link rel="stylesheet" href=" {{ asset('css/style.css') }} ">
+{% endblock %}
 
+{% block title %}Category Edit{% endblock %}
 {% block body %}
-    <h1>Category edit</h1>
 
-    {{ form_start(edit_form) }}
-        {{ form_widget(edit_form) }}
-        <input type="submit" value="Edit" />
-    {{ form_end(edit_form) }}
 
-    <ul>
-        <li>
-            <a href="{{ path('category_index') }}">Back to the list</a>
-        </li>
-        <li>
-            {{ form_start(delete_form) }}
-                <input type="submit" value="Delete">
-            {{ form_end(delete_form) }}
-        </li>
-    </ul>
+    <div class="catalog-wrapper">
+        <div id="category-tree" class="col-md-2 col-xs-12 col-lg-2 col-sm-4"></div>
+
+        <div id="products-grid" class="col-md-10 col-xs-12 col-sm-8 col-lg-10 col-md-offset-2
+            col-sm-offset-4 col-lg-offset-2">
+            <h1>Category name: {{ category.title }}</h1>
+            <p>Category id : {{ category.id }}</p>
+            {{ form_start(edit_form) }}
+            <div class="form-group">
+                {{ form_row(edit_form.title, {'attr': {'class': 'form-control'},
+                    'label_attr': {'class': 'control-label'}
+                })
+                }}
+                {{ form_row(edit_form.parent, {'attr': {'class': 'form-control category-hidden-feild'},
+                    'label_attr': {'class': 'control-label'}
+                })
+                }}
+                {{ form_row(edit_form.isActive, {
+                    'label_attr': {'class': 'control-label'}
+                })
+                }}
+
+            </div>
+            <div class="form-group">
+                <button type="submit" class="btn btn-warning btn-150px btn-margin">
+                    <i class="fa fa-btn fa-sign-in"></i> Submit
+                </button>
+            </div>
+            {{ form_end(edit_form) }}
+
+            <div class="form-group">
+                {{ form_start(delete_form) }}
+                <input type="submit" value="Delete" class="btn btn-danger btn-150px btn-margin">
+                {{ form_end(delete_form) }}
+            </div>
+        </div>
+    </div>
+
+    {% block javascripts %}
+        <script src="{{ asset('js/CategoryAdmin.js') }}"></script>
+    {% endblock %}
+
+    <script>
+        $("#category-tree").categoryAdmin({
+            dataUrl: 'http://127.0.0.1:8000/category/ajax/'
+        });
+    </script>
+
 {% endblock %}

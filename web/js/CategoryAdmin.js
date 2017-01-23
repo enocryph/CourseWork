@@ -1,4 +1,4 @@
-$.fn.categoryView = function(options) {
+$.fn.categoryAdmin = function(options) {
     checkOptions(options);
     var rootElement = this[0]; //root element for appending
     rootElement.setAttribute('tree-level', '2');
@@ -7,7 +7,7 @@ $.fn.categoryView = function(options) {
     var liControlOpenCSS = 'tree-item-control-opened';
     var liControlCloseCSS = 'tree-item-control-closed';
     var dataUrl = options.dataUrl;
-    var editUrl = options.editUrl;
+    var select = document.getElementById('appbundle_category_parent');
 
     rootElement.onclick = function (event) {
         delegateClick(event);
@@ -48,9 +48,6 @@ $.fn.categoryView = function(options) {
         var li = document.createElement('li');
         var expandLevel = parseInt(treeLevel) + 1;
         var a = document.createElement('a');
-        a.setAttribute('href', editUrl + categoryID + '/edit');
-        a.classList.add('category-edit-link');
-        a.innerHTML = 'Edit';
 
 
         li.setAttribute('expanded', 'false');
@@ -59,7 +56,6 @@ $.fn.categoryView = function(options) {
         li.setAttribute('tree-level', expandLevel.toString());
         li.classList.add(liClassCSS);
         li.innerHTML = generateSplitter(treeLevel) + categoryTitle + generateSplitter(2);
-        li.appendChild(a);
 
         if (expandable === false) {
             li.setAttribute('childs', 'false');
@@ -73,7 +69,7 @@ $.fn.categoryView = function(options) {
 
     function delegateClick(event) {
         var target = event.target;
-
+        select.value = target.getAttribute('category_id');
         if (target.tagName !== "DIV" && target.tagName !== "UL") {
             var expand = target.getAttribute('expanded');
             var download = target.getAttribute('downloaded');
@@ -99,6 +95,8 @@ $.fn.categoryView = function(options) {
                 toggleClasses(target, liControlCloseCSS, liControlOpenCSS);
             }
 
+
+
         }
     }
 
@@ -111,9 +109,6 @@ $.fn.categoryView = function(options) {
     function checkOptions(options) {
         if (!options.dataUrl) {
             throw 'Wrong "dataUrl" exception';
-        }
-        if (!options.editUrl) {
-            throw 'Wrong "editUrl" exception';
         }
     }
 }

@@ -20,7 +20,7 @@ use AppBundle\Entity\RecursiveCategoryIterator;
 class CatalogController extends Controller
 {
     /**
-     * @Route("/", name="Catalog_index")
+     * @Route("/", name="catalog_index")
      * @Method("GET")
      */
     public function indexAction(Request $request)
@@ -92,30 +92,33 @@ class CatalogController extends Controller
         return new JsonResponse(array('products'=>$responseProducts,'count'=>$count));
     }
     /**
-     * @Route("/ajax/category/{id}", name="category_ajax")
+     * @Route("/ajax/category/{id}", name="catalog_category_ajax")
      * @Method("GET")
      */
     public function categoryAjaxAction($id)
     {
         $em = $this->getDoctrine()->getManager();
         if ($id == 'null') {
-            $categories = $em->getRepository("AppBundle:Category")->findBy(array('parent'=>null,'isActive'=>true));
+            $categories = $em->getRepository("AppBundle:Category")
+                ->findBy(array('parent'=>null,'isActive'=>true));
         }
         else {
-            $requestCategory = $em->getRepository("AppBundle:Category")->find($id);
-            $categories=$requestCategory->getChildren();
+            $categories = $em->getRepository("AppBundle:Category")
+                ->findBy(array('parent'=>$id,'isActive'=>true));
         }
 
         $responseCategories=array();
 
         foreach ($categories as $category) {
-            $children=$em->getRepository("AppBundle:Category")->findBy(array('parent'=>$category->getId()));
-            $responseCategories[]=array(
-                'id'=>$category->getId(),
-                'title'=>$category->getTitle(),
-                'children'=>($children != null),
+            $children = $em->getRepository("AppBundle:Category")
+                ->findBy(array('parent' => $category->getId(), 'isActive' => true));
+            $responseCategories[] = array(
+                'id' => $category->getId(),
+                'title' => $category->getTitle(),
+                'children' => ($children != null),
             );
         }
+
 
         return new JsonResponse($responseCategories);
     }
