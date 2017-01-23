@@ -16,7 +16,7 @@ class UserType extends AbstractType
     {
         $builder->add('email')->add('name')->add('role', ChoiceType::class, array(
             'choices' =>
-                array('ROLE_USER' => 'ROLE_USER', 'ROLE_ADMIN' => 'ROLE_ADMIN','ROLE_MODERATOR' => 'ROLE_MODERATOR')))
+                array('ROLE_USER' => 'ROLE_USER','ROLE_MODERATOR' => 'ROLE_MODERATOR', 'ROLE_ADMIN' => 'ROLE_ADMIN')))
             ->add('enabled');
     }
     
