@@ -16,6 +16,6 @@ class AccessDeniedHandler implements AccessDeniedHandlerInterface
 {
     public function handle(Request $request, AccessDeniedException $accessDeniedException)
     {
-        return new RedirectResponse('http://vk.com');
+        return new RedirectResponse('http://127.0.0.1:8000/');
     }
 }
